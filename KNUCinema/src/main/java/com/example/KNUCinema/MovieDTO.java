@@ -8,6 +8,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieDTO {
+    private int id;
     private String title;
     private String image;
     private String content;
