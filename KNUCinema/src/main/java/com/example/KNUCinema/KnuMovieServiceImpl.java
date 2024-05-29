@@ -1,8 +1,11 @@
 package com.example.KNUCinema;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 
-public class KnuMovieServiceImpl {
+@Service
+public class KnuMovieServiceImpl implements KnuMovieService {
 
     private ArrayList<MovieDTO> db = new ArrayList<>();
 
