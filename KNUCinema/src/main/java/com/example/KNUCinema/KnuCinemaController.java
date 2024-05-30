@@ -14,7 +14,7 @@ public class KnuCinemaController {
 
     @RequestMapping("/")
     public  String home() {
-        return "home";
+        return "mainPage";
     }
 
     @RequestMapping("/Seat/{id}")
@@ -22,6 +22,12 @@ public class KnuCinemaController {
     {
         model.addAttribute("Movie",movieService.find(id));
         return "Seat";
+    }
+
+    @RequestMapping("/booking/{phoneNumber}")
+    public String checkBook(@PathVariable("phoneNumber") String number, Model model){
+        model.addAttribute("phoneNumber",movieService.findPhoneNumber(number));
+        return "checkBook";
     }
 
     @RequestMapping("/count")
