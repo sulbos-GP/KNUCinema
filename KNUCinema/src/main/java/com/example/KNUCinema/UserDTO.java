@@ -11,4 +11,5 @@ public class UserDTO {
     private String name;
     private int age;
     private String phoneNumber;
+    private String movieTitle;
 }

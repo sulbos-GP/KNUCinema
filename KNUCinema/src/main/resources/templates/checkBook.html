@@ -5,7 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-    <span th:text = "${phoneNumber.phoneNumber}"></span>
-    <span th:text = "${phoneNumber.name}"></span>
+
+   <p>예약자: <span th:text = "${phoneNumber.name}"> </span> </p>
+   <p>예약한 영화: <span th:text = "${phoneNumber.movieTitle}"> </span> </p>
 </body>
 </html>

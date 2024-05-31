@@ -21,7 +21,7 @@ public class KnuMovieServiceImpl implements KnuMovieService {
 
 
         //user 메모리db생성
-        userDB.add(new UserDTO(1,"홍성현",26,"01092059813"));
+        userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
 
     }
 
