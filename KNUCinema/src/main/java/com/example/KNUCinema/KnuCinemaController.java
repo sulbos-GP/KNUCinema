@@ -17,6 +17,11 @@ public class KnuCinemaController {
         return "home";
     }
 
+    @RequestMapping("/Test")
+    public String test(){
+        return "Test";
+    }
+
     @RequestMapping("/Seat/{id}")
     public String seat(@PathVariable("id") int id, Model model)
     {
@@ -30,5 +35,10 @@ public class KnuCinemaController {
         return "카운트 = "+movieService.count();
     }
 
+    public void adultNum(int adult)
+    {
+        System.out.println("Adult 추가");
+        adult++;
+    }
 
 }

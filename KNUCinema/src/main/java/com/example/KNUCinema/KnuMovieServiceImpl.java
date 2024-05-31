@@ -14,20 +14,24 @@ public class KnuMovieServiceImpl implements KnuMovieService {
     public KnuMovieServiceImpl()
     {
         System.out.println("객체 생성");
-        boolean[][] seat =  new boolean[6][10];
-        for (boolean[] booleans : seat) Arrays.fill(booleans, false);
+        int[][] seat =  new int[10][10];
+        for (int[] ints : seat) Arrays.fill(ints,0);
         db.add(new MovieDTO(1,"탑 건","/image/TopGun.png","영화 내용",seat));
 
     }
 
+    @Override
     public MovieDTO find(int id)
     {
         MovieDTO find = db.stream().filter(m-> m.getId()==id).findFirst().get();
         return find;
     }
 
+
+    @Override
     public int count()
     {
+        System.out.println(db.size());
         return db.size();
     }
 }
