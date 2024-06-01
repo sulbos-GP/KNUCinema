@@ -50,8 +50,8 @@ public class KnuMovieReservationImpl implements  KnuMovieReservation
 
     private void loadMoviesForTheater(int theaterId) {
         movies.clear();
-        movies.add(new MovieDTO(1, new Time(10),"Movie 1", "image1.jpg", "Description 1", new int[10][10]));
-        movies.add(new MovieDTO(2, new Time(10), "Movie 2", "image2.jpg", "Description 2", new int[10][10]));
+        movies.add(new MovieDTO(1, "Movie 1", "image1.jpg", "Description 1", new int[10][10]));
+        movies.add(new MovieDTO(2, "Movie 2", "image2.jpg", "Description 2", new int[10][10]));
 
     }
 
