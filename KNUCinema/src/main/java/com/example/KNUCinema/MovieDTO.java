@@ -10,7 +10,6 @@ public class MovieDTO {
     private String title;
     private String image;
     private String content;
-    private int[][] Seat;
 }
 
 
