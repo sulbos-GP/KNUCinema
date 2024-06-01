@@ -28,6 +28,8 @@ public class KnuCinemaController {
     }
 
 
+    @RequestMapping("/reserve")
+    public String reservePage(){return "reserve"; }
 
 
     @RequestMapping("/Seat/{id}")

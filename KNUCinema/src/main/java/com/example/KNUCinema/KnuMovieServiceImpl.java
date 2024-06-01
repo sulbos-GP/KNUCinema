@@ -3,6 +3,7 @@ package com.example.KNUCinema;
 import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,7 +18,7 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         System.out.println("객체 생성");
         int[][] seat =  new int[10][10];
         for (int[] ints : seat) Arrays.fill(ints,0);
-        db.add(new MovieDTO(1,"탑 건","/image/TopGun.png","영화 내용",seat));
+        db.add(new MovieDTO(1,"탑건","/image/TopGun.png","영화 내용",seat));
 
 
         //user 메모리db생성
