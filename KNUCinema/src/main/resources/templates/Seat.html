@@ -50,25 +50,27 @@
 <script th:inline="javascript">
     // 행과 열의 크기
     const rows = 10;
-    const cols = 1;
+    const cols = 10;
+    const alpha = 'A';
 
     const container = document.getElementById('seatContainer');
 
     // 좌석 생성 및 이벤트 설정
-    for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
-        for (let colIndex = 0; colIndex < cols; colIndex++) {
+    for (let rowIndex = 0; rowIndex <    rows; rowIndex++) {
+        for (let colIndex = 1; colIndex <= cols; colIndex++) {
             const seat = document.createElement('div');
             seat.classList.add('seat');
-            seat.dataset.row = rowIndex;
+            seat.dataset.row = String.fromCharCode(alpha.charCodeAt(0) + rowIndex);
             seat.dataset.col = colIndex;
             seat.dataset.active = 0;
+            // 좌석 클릭 시 발생 이벤트 리스너
             seat.addEventListener('click', () => {
                 seat.classList.toggle('selected');
                 if(seat.classList.contains('selected'))
                     seat.dataset.active=1;
                 else
                     seat.dataset.active=0;
-                console.log(`Row: ${rowIndex}, Col: ${colIndex}`);
+                console.log(`Row: ${seat.dataset.row}, Col: ${seat.dataset.col}`);
             });
             container.appendChild(seat);
         }

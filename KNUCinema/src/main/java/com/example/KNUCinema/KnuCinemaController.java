@@ -3,8 +3,10 @@ package com.example.KNUCinema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class KnuCinemaController {
@@ -17,7 +19,7 @@ public class KnuCinemaController {
 
     @RequestMapping("/")
     public  String home() {
-        return "home";
+        return "mainPage";
     }
 
     @RequestMapping("/Test")
@@ -33,6 +35,16 @@ public class KnuCinemaController {
     {
         model.addAttribute("Movie",movieService.find(id));
         return "Seat";
+    }
+
+    @RequestMapping("/checkbook")
+    public  String inputPage(){
+        return "inputPhoneNumberForm";
+    }
+    @GetMapping("/mybook")
+    public String checkBook(@RequestParam("phoneNumber") String number, Model model){
+        model.addAttribute("phoneNumber",movieService.findPhoneNumber(number));
+        return "checkBook";
     }
 
     @RequestMapping("/count")
