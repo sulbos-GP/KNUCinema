@@ -10,11 +10,9 @@ import java.util.Map;
 @NoArgsConstructor
 public class MovieDTO {
     private int id;
-    private Time time;
     private String title;
     private String image;
     private String content;
-    private int[][] Seat;
 }
 
 
