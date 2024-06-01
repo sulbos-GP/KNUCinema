@@ -13,9 +13,6 @@ public class KnuMovieServiceImpl implements KnuMovieService {
     public ArrayList<MovieDTO> db = new ArrayList<>();
     public ArrayList<UserDTO> userDB = new ArrayList<>();
 
-    private ArrayList<MovieDTO> db = new ArrayList<>();
-    private ArrayList<UserDTO> userDB = new ArrayList<>();
-    private ArrayList<CinemaDTO> cinemaDB = new ArrayList<>();
 
     public KnuMovieServiceImpl()
     {
@@ -28,7 +25,7 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         //user 메모리db생성
         userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
 
-        cinemaDB.add(new CinemaDTO(1,new Time(1),seat,db.get(0)));
+        movie.add(new CinemaDTO(1,new Time(1),seat,db.get(0)));
     }
 
     @Override
