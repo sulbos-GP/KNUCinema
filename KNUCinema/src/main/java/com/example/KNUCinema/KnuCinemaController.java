@@ -12,6 +12,9 @@ public class KnuCinemaController {
     @Autowired
     private KnuMovieService movieService;
 
+    @Autowired
+    private KnuMovieReservation movieReservation;
+
     @RequestMapping("/")
     public  String home() {
         return "home";
@@ -21,6 +24,9 @@ public class KnuCinemaController {
     public String test(){
         return "Test";
     }
+
+
+
 
     @RequestMapping("/Seat/{id}")
     public String seat(@PathVariable("id") int id, Model model)
@@ -40,5 +46,16 @@ public class KnuCinemaController {
         System.out.println("Adult 추가");
         adult++;
     }
+
+
+
+
+
+    @RequestMapping("/reservation")
+    public String reservation(){
+        return "reservation";
+    }
+
+
 
 }
