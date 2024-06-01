@@ -11,5 +11,4 @@ public class ReservationDTO {
     private int id;
     private CinemaDTO cinema;
     private int UserId;
-
 }

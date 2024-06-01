@@ -8,9 +8,9 @@ import java.util.Arrays;
 
 @Service
 public class KnuMovieServiceImpl implements KnuMovieService {
-
-    private ArrayList<MovieDTO> db = new ArrayList<>();
-    private ArrayList<UserDTO> userDB = new ArrayList<>();
+    public   ArrayList<CinemaDTO> movie = new ArrayList<>();
+    public ArrayList<MovieDTO> db = new ArrayList<>();
+    public ArrayList<UserDTO> userDB = new ArrayList<>();
 
     public KnuMovieServiceImpl()
     {
