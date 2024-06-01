@@ -11,7 +11,14 @@ import java.util.ArrayList;
 
 public class CinemaDTO extends MovieDTO {
     private int id;
-    private String name;
     private Time time;
     private int[][] seat;
+
+    public CinemaDTO(int id,Time time,int[][] seat,MovieDTO movieDTO)
+    {
+        super(movieDTO);
+        this.id=id;
+        this.time=time;
+        this.seat=seat;
+    }
 }

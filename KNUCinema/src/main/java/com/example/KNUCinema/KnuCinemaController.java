@@ -1,12 +1,12 @@
 package com.example.KNUCinema;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class KnuCinemaController {
@@ -59,8 +59,14 @@ public class KnuCinemaController {
         adult++;
     }
 
-
-
+    //Seat/1 주소에서 Feach API POST
+    @PostMapping("/Seat/1")
+    public ResponseEntity<String> reserveSeats(@RequestBody List<String> seats) {
+        // 좌석 데이터를 처리하는 로직
+        // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
+        System.out.println(seats);
+        return ResponseEntity.ok("Seats successfully");
+    }
 
 
     @RequestMapping("/reservation")

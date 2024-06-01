@@ -36,13 +36,41 @@
 <span th:text="${Movie.title}"/>
 <td>
     <input type='button'
-           onclick='count("plus")'
+           onclick='count("plus","adult")'
            value='+'/>
     <input type='button'
-           onclick='count("minus")'
+           onclick='count("minus","adult")'
            value='-'/>
     <div id='adult'>0</div>
 </td>
+<td>
+    <input type='button'
+           onclick='count("plus","teenager")'
+           value='+'/>
+    <input type='button'
+           onclick='count("minus","teenager")'
+           value='-'/>
+    <div id='teenager'>0</div>
+</td>
+<td>
+    <input type='button'
+           onclick='count("plus","old man")'
+           value='+'/>
+    <input type='button'
+           onclick='count("minus","old man")'
+           value='-'/>
+    <div id='old man'>0</div>
+</td>
+<td>
+    <input type='button'
+           onclick='count("plus","Disorder")'
+           value='+'/>
+    <input type='button'
+           onclick='count("minus","Disorder")'
+           value='-'/>
+    <div id='Disorder'>0</div>
+</td>
+<button onclick="sendData()">데이터 전달</button>
 <br>
 <div class="wrapper">
     <div class="container" id="seatContainer"></div>
@@ -75,6 +103,28 @@
             container.appendChild(seat);
         }
     }
+
+    function sendData() {
+        const selectedSeats = [];
+        document.querySelectorAll('.seat.selected').forEach(seat => {
+            selectedSeats.push(seat.dataset.row);
+        });
+
+        fetch('/Seat/1', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedSeats)
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert("Seats reserved successfully!");
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
 </script>
 
 </body>
@@ -83,8 +133,8 @@
     console.log(idx);
 </script>
 <script th:inline="javascript">
-    function count(type)  {
-      const adultElement = document.getElementById('adult');
+    function count(type,valueName)  {
+      const adultElement = document.getElementById(valueName);
           var idx = [[${Movie.id}]];
 
       let number = adultElement.innerText;

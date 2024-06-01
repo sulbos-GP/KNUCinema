@@ -3,6 +3,7 @@ package com.example.KNUCinema;
 import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -11,6 +12,7 @@ public class KnuMovieServiceImpl implements KnuMovieService {
 
     private ArrayList<MovieDTO> db = new ArrayList<>();
     private ArrayList<UserDTO> userDB = new ArrayList<>();
+    private ArrayList<CinemaDTO> cinemaDB = new ArrayList<>();
 
     public KnuMovieServiceImpl()
     {
@@ -19,10 +21,10 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         for (int[] ints : seat) Arrays.fill(ints,0);
         db.add(new MovieDTO(1,"탑 건","/image/TopGun.png","영화 내용"));
 
-
         //user 메모리db생성
         userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
 
+        cinemaDB.add(new CinemaDTO(1,new Time(1),seat,db.get(0)));
     }
 
     @Override
