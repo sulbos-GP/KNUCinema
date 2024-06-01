@@ -1,6 +1,15 @@
 package com.example.KNUCinema;
 
-public class ReservationDTO {
+import lombok.*;
 
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
+public class ReservationDTO {
+    private int id;
+    private CinemaDTO cinema;
+    private int UserId;
 
 }
