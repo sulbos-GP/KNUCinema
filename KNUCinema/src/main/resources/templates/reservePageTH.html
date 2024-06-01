@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>영화 선택</title>
 
     <style>
         .tablecontainer {
@@ -29,42 +29,31 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="movieTitleCell" data-title="영화1">영화1</td>
-                <td class="selectDateArea" rowspan="3">
+           <!-- db에 arraylist로 추가할 경우 model.addAttribute("movies",list) 로 하길 바람
+            https://velog.io/@chang626/%ED%83%80%EC%9E%84%EB%A6%AC%ED%94%84-%EA%B8%B0%EB%B3%B8-%EA%B8%B0%EB%8A%A5-2
+            자세한 설명은 위 링크
+
+            db에서 추가한 만큼 동적으로 영화 제목 가져온다고는 하는데 테스트 안해봄 
+        -->
+            <tr th:each="movie, iterStat : ${movies}">
+                <td class="movieTitleCell" th:id="'movie' + ${iterStat.id}" th:data-title="${movie.title}" th:text="${movie.title}">영화 제목</td>
+               
+                <td class="selectDateArea" th:if="${iterStat.id == 0}" rowspan="3">
                     <input type="date" id="datePicker">
                 </td>
             </tr>
+           
             <tr>
-                <td class="movieTitleCell" data-title="영화2">영화2</td>
-            </tr>
-            <tr>
-                <td class="movieTitleCell" data-title="영화3">영화3</td>
-            </tr>
-            <tr>
-                <td class="movieTitleCell" data-title="영화4">영화4</td>
                 <td class="selectedMovieTitle">영화제목</td>
             </tr>
             <tr>
-                <td class="movieTitleCell" data-title="영화5">영화5</td>
                 <td class="selectTime" rowspan="5">시간선택</td>
-            </tr>
-            <tr>
-                <td class="movieTitleCell" data-title="영화6">영화6</td>
-            </tr>
-            <tr>
-                <td class="movieTitleCell" data-title="영화7">영화7</td>
-            </tr>
-            <tr>
-                <td class="movieTitleCell" data-title="영화8">영화8</td>
-            </tr>
-            <tr>
-                <td class="movieTitleCell" data-title="영화9">영화9</td>
             </tr>
         </tbody>
     </table>
 
     <script>
+       
         document.getElementById('datePicker').addEventListener('change', function() {
             var selectedDate = new Date(this.value);
             var week = ['일', '월', '화', '수', '목', '금', '토'];
@@ -75,6 +64,7 @@
             document.querySelector('.selectedDate').innerText = formattedDate;
         });
 
+        
         document.querySelectorAll('.movieTitleCell').forEach(function(cell) {
             cell.addEventListener('click', function() {
                 var movieTitle = this.getAttribute('data-title');
