@@ -9,6 +9,9 @@ import java.util.Arrays;
 
 @Service
 public class KnuMovieServiceImpl implements KnuMovieService {
+    public   ArrayList<CinemaDTO> movie = new ArrayList<>();
+    public ArrayList<MovieDTO> db = new ArrayList<>();
+    public ArrayList<UserDTO> userDB = new ArrayList<>();
 
     private ArrayList<MovieDTO> db = new ArrayList<>();
     private ArrayList<UserDTO> userDB = new ArrayList<>();
@@ -19,6 +22,7 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         System.out.println("객체 생성");
         int[][] seat =  new int[10][10];
         for (int[] ints : seat) Arrays.fill(ints,0);
+   
         db.add(new MovieDTO(1,"탑 건","/image/TopGun.png","영화 내용"));
 
         //user 메모리db생성
