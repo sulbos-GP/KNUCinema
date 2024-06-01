@@ -14,10 +14,21 @@ public class KnuCinemaController {
     @Autowired
     private KnuMovieService movieService;
 
+    @Autowired
+    private KnuMovieReservation movieReservation;
+
     @RequestMapping("/")
     public  String home() {
         return "mainPage";
     }
+
+    @RequestMapping("/Test")
+    public String test(){
+        return "Test";
+    }
+
+
+
 
     @RequestMapping("/Seat/{id}")
     public String seat(@PathVariable("id") int id, Model model)
@@ -41,6 +52,22 @@ public class KnuCinemaController {
     {
         return "카운트 = "+movieService.count();
     }
+
+    public void adultNum(int adult)
+    {
+        System.out.println("Adult 추가");
+        adult++;
+    }
+
+
+
+
+
+    @RequestMapping("/reservation")
+    public String reservation(){
+        return "reservation";
+    }
+
 
 
 }
