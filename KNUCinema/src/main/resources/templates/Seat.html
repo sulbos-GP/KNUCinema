@@ -87,7 +87,6 @@
     resetSeat();
     function resetSeat(){
         // 좌석 생성 및 이벤트 설정
-        console.log("초기화???");
         for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
             for (let colIndex = 0; colIndex < cols; colIndex++) {
                 const seat = document.createElement('div');
@@ -112,7 +111,6 @@
                             alert("인원을 확인해 주세요.");
                     }
                 });
-                console.log("초기호 완료");
                 container.appendChild(seat);
             }
         }
