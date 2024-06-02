@@ -39,6 +39,7 @@ public class KnuCinemaController {
     public String seat(@PathVariable("id") int id, Model model)
     {
         model.addAttribute("Movie",movieService.find(id));
+        model.addAttribute("Cinema",movieService.findCinemaDTO(id));
         return "Seat";
     }
 
