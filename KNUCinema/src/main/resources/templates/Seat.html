@@ -85,14 +85,19 @@
 
     // 좌석 생성 및 이벤트 설정
     for (let rowIndex = 0; rowIndex <    rows; rowIndex++) {
-        for (let colIndex = 1; colIndex <= cols; colIndex++) {
+        for (let colIndex = 0; colIndex < cols; colIndex++) {
             const seat = document.createElement('div');
             seat.classList.add('seat');
-            seat.dataset.row = String.fromCharCode(alpha.charCodeAt(0) + rowIndex);
+            seat.dataset.row = rowIndex;
             seat.dataset.col = colIndex;
             seat.dataset.active = 0;
             // 좌석 클릭 시 발생 이벤트 리스너
             seat.addEventListener('click', () => {
+<!--                sumSeat += parseInt(document.getElementById('adult').innerText);-->
+<!--                sumSeat += parseInt(document.getElementById('teenager').innerText);-->
+<!--                sumSeat += parseInt(document.getElementById('old man').innerText);-->
+<!--                sumSeat += parseInt(document.getElementById('Disorder').innerText);-->
+<!--                if(sumSeat-->
                 seat.classList.toggle('selected');
                 if(seat.classList.contains('selected'))
                     seat.dataset.active=1;
@@ -107,7 +112,11 @@
     function sendData() {
         const selectedSeats = [];
         document.querySelectorAll('.seat.selected').forEach(seat => {
-            selectedSeats.push(seat.dataset.row);
+            selectedSeats.push({
+                row: parseInt(seat.dataset.row),
+                col: parseInt(seat.dataset.col),
+                seat: null
+            });
         });
 
         fetch('/Seat/1', {
@@ -128,10 +137,6 @@
 </script>
 
 </body>
-<script th:inline="javascript">
-    var idx = [[${Movie.title}]];
-    console.log(idx);
-</script>
 <script th:inline="javascript">
     function count(type,valueName)  {
       const adultElement = document.getElementById(valueName);

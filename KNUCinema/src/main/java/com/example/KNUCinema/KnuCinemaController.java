@@ -66,10 +66,18 @@ public class KnuCinemaController {
 
     //Seat/1 주소에서 Feach API POST
     @PostMapping("/Seat/1")
-    public ResponseEntity<String> reserveSeats(@RequestBody List<String> seats) {
+    public ResponseEntity<String> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats) {
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
-        System.out.println(seats);
+        // System.out.println(seats);
+        int[][] seatArray = movieService.findCinemaDTO(1).getSeat().getSeat();
+        for(int i=0;i<seats.size();i++)
+        {
+            CinemaDTO.Seat index = seats.get(i);
+            seatArray[index.getRow()][index.getCol()] = 1;
+        }
+        movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
+        System.out.println(movieService.findCinemaDTO(1).getSeat());
         return ResponseEntity.ok("Seats successfully");
     }
 

@@ -35,6 +35,13 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         return find;
     }
 
+    @Override
+    public CinemaDTO findCinemaDTO(int id)
+    {
+        CinemaDTO find = movie.stream().filter(m->m.getId()==id).findFirst().get();
+        return find;
+    }
+
     
     //휴대폰 번호로 예약 조회
     public UserDTO findPhoneNumber(String phoneNumber){
