@@ -83,35 +83,48 @@
     // 행과 열의 크기
     const rows = [[${Cinema.seat.row}]];
     const cols = [[${Cinema.seat.col}]];
-    const alpha = 'A';
-    console.log(total);
     const container = document.getElementById('seatContainer');
-
-    // 좌석 생성 및 이벤트 설정
-    for (let rowIndex = 0; rowIndex <    rows; rowIndex++) {
-        for (let colIndex = 0; colIndex < cols; colIndex++) {
-            const seat = document.createElement('div');
-            seat.classList.add('seat');
-            seat.dataset.row = rowIndex;
-            seat.dataset.col = colIndex;
-            seat.dataset.active = 0;
-            // 좌석 클릭 시 발생 이벤트 리스너
-            seat.addEventListener('click', () => {
-                if(seat.classList.contains('selected')){
-                    seat.dataset.active=0;
-                    curTotal-=1;
-                    seat.classList.toggle('selected');
-                }
-                else{
-                    if(total>curTotal){
-                        seat.dataset.active=1;
-                        curTotal+=1;
+    resetSeat();
+    function resetSeat(){
+        // 좌석 생성 및 이벤트 설정
+        console.log("초기화???");
+        for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+            for (let colIndex = 0; colIndex < cols; colIndex++) {
+                const seat = document.createElement('div');
+                seat.classList.add('seat');
+                seat.dataset.row = rowIndex;
+                seat.dataset.col = colIndex;
+                seat.dataset.active = 0;
+                // 좌석 클릭 시 발생 이벤트 리스너
+                seat.addEventListener('click', () => {
+                    if(seat.classList.contains('selected')){
+                        seat.dataset.active=0;
+                        curTotal-=1;
                         seat.classList.toggle('selected');
                     }
-                }
-            });
-            container.appendChild(seat);
+                    else{
+                        if(total>curTotal){
+                            seat.dataset.active=1;
+                            curTotal+=1;
+                            seat.classList.toggle('selected');
+                        }
+                        else
+                            alert("인원을 확인해 주세요.");
+                    }
+                });
+                console.log("초기호 완료");
+                container.appendChild(seat);
+            }
         }
+    }
+    function testReset()
+    {
+        allChildren = document.querySelectorAll('.seat.selected');
+        for(i=0;i<allChildren.length;i++){
+            allChildren[i].className = "seat";
+            allChildren[i].dataset.active=0;
+            curTotal=0;
+            }
     }
 
     function sendData() {
@@ -143,15 +156,16 @@
 </body>
 <script th:inline="javascript">
     function count(type,valueName)  {
-      const adultElement = document.getElementById(valueName);
-          var idx = [[${Movie.id}]];
+        testReset();
+        const adultElement = document.getElementById(valueName);
+        var idx = [[${Movie.id}]];
 
-      let number = adultElement.innerText;
+        let number = adultElement.innerText;
 
-      if(type === 'plus') {
-        number = parseInt(number) + 1;
-        total+=1;
-      }else if(type === 'minus')  {
+        if(type === 'plus') {
+            number = parseInt(number) + 1;
+            total+=1;
+        }else if(type === 'minus')  {
         if(number!=0){
             number = parseInt(number) - 1;
             total-=1;
@@ -159,6 +173,8 @@
 
       }
       adultElement.innerText = number;
+              console.log(total);
+        console.log(curTotal);
     }
 </script>
 </html>
