@@ -9,9 +9,10 @@ import java.util.Arrays;
 
 @Service
 public class KnuMovieServiceImpl implements KnuMovieService {
+    public   ArrayList<CinemaDTO> movie = new ArrayList<>();
+    public ArrayList<MovieDTO> db = new ArrayList<>();
+    public ArrayList<UserDTO> userDB = new ArrayList<>();
 
-    private ArrayList<MovieDTO> db = new ArrayList<>();
-    private ArrayList<UserDTO> userDB = new ArrayList<>();
 
     public KnuMovieServiceImpl()
     {
@@ -31,12 +32,20 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         //user 메모리db생성
         userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
 
+        movie.add(new CinemaDTO(1,new Time(1),seat,db.get(0)));
     }
 
     @Override
     public MovieDTO find(int id)
     {
         MovieDTO find = db.stream().filter(m-> m.getId()==id).findFirst().get();
+        return find;
+    }
+
+    @Override
+    public CinemaDTO findCinemaDTO(int id)
+    {
+        CinemaDTO find = movie.stream().filter(m->m.getId()==id).findFirst().get();
         return find;
     }
 

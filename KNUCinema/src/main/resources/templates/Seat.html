@@ -11,12 +11,12 @@
         }
         .container {
             display: grid;
-            grid-template-columns: repeat(10, 20px); /* 좌석 배치의 열 수에 따라 조정 */
+            grid-template-columns: repeat(10, 30px); /* 좌석 배치의 열 수에 따라 조정 */
             gap: 10px;
         }
         .seat {
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             background-color: #444;
             border-radius: 5px;
             cursor: pointer;
@@ -36,63 +36,139 @@
 <span th:text="${Movie.title}"/>
 <td>
     <input type='button'
-           onclick='count("plus")'
+           onclick='count("plus","adult")'
            value='+'/>
     <input type='button'
-           onclick='count("minus")'
+           onclick='count("minus","adult")'
            value='-'/>
     <div id='adult'>0</div>
 </td>
+<td>
+    <input type='button'
+           onclick='count("plus","teenager")'
+           value='+'/>
+    <input type='button'
+           onclick='count("minus","teenager")'
+           value='-'/>
+    <div id='teenager'>0</div>
+</td>
+<td>
+    <input type='button'
+           onclick='count("plus","old man")'
+           value='+'/>
+    <input type='button'
+           onclick='count("minus","old man")'
+           value='-'/>
+    <div id='old man'>0</div>
+</td>
+<td>
+    <input type='button'
+           onclick='count("plus","Disorder")'
+           value='+'/>
+    <input type='button'
+           onclick='count("minus","Disorder")'
+           value='-'/>
+    <div id='Disorder'>0</div>
+</td>
+<button onclick="sendData()">데이터 전달</button>
 <br>
 <div class="wrapper">
     <div class="container" id="seatContainer"></div>
 </div>
+<script>
+    total = 0;
+    curTotal = 0;
+</script>
 <script th:inline="javascript">
     // 행과 열의 크기
-    const rows = 10;
-    const cols = 10;
-    const alpha = 'A';
-
+    const rows = [[${Cinema.seat.row}]];
+    const cols = [[${Cinema.seat.col}]];
     const container = document.getElementById('seatContainer');
-
-    // 좌석 생성 및 이벤트 설정
-    for (let rowIndex = 0; rowIndex <    rows; rowIndex++) {
-        for (let colIndex = 1; colIndex <= cols; colIndex++) {
-            const seat = document.createElement('div');
-            seat.classList.add('seat');
-            seat.dataset.row = String.fromCharCode(alpha.charCodeAt(0) + rowIndex);
-            seat.dataset.col = colIndex;
-            seat.dataset.active = 0;
-            // 좌석 클릭 시 발생 이벤트 리스너
-            seat.addEventListener('click', () => {
-                seat.classList.toggle('selected');
-                if(seat.classList.contains('selected'))
-                    seat.dataset.active=1;
-                else
-                    seat.dataset.active=0;
-                console.log(`Row: ${seat.dataset.row}, Col: ${seat.dataset.col}`);
-            });
-            container.appendChild(seat);
+    resetSeat();
+    function resetSeat(){
+        // 좌석 생성 및 이벤트 설정
+        for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+            for (let colIndex = 0; colIndex < cols; colIndex++) {
+                const seat = document.createElement('div');
+                seat.classList.add('seat');
+                seat.dataset.row = rowIndex;
+                seat.dataset.col = colIndex;
+                seat.dataset.active = 0;
+                // 좌석 클릭 시 발생 이벤트 리스너
+                seat.addEventListener('click', () => {
+                    if(seat.classList.contains('selected')){
+                        seat.dataset.active=0;
+                        curTotal-=1;
+                        seat.classList.toggle('selected');
+                    }
+                    else{
+                        if(total>curTotal){
+                            seat.dataset.active=1;
+                            curTotal+=1;
+                            seat.classList.toggle('selected');
+                        }
+                        else
+                            alert("인원을 확인해 주세요.");
+                    }
+                });
+                container.appendChild(seat);
+            }
         }
     }
-</script>
+    function testReset()
+    {
+        allChildren = document.querySelectorAll('.seat.selected');
+        for(i=0;i<allChildren.length;i++){
+            allChildren[i].className = "seat";
+            allChildren[i].dataset.active=0;
+            curTotal=0;
+            }
+    }
 
+    function sendData() {
+        const selectedSeats = [];
+        document.querySelectorAll('.seat.selected').forEach(seat => {
+            selectedSeats.push({
+                row: parseInt(seat.dataset.row),
+                col: parseInt(seat.dataset.col),
+                seat: null
+            });
+        });
+
+        fetch('/Seat/1', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedSeats)
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert("Seats reserved successfully!");
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
 </body>
 <script th:inline="javascript">
-    var idx = [[${Movie.title}]];
-    console.log(idx);
-</script>
-<script th:inline="javascript">
-    function count(type)  {
-      const adultElement = document.getElementById('adult');
-          var idx = [[${Movie.id}]];
+    function count(type,valueName)  {
+        testReset();
+        const adultElement = document.getElementById(valueName);
+        var idx = [[${Movie.id}]];
 
-      let number = adultElement.innerText;
+        let number = adultElement.innerText;
 
-      if(type === 'plus') {
-        number = parseInt(number) + 1;
-      }else if(type === 'minus')  {
-        number = parseInt(number) - 1;
+        if(type === 'plus') {
+            number = parseInt(number) + 1;
+            total+=1;
+        }else if(type === 'minus')  {
+        if(number!=0){
+            number = parseInt(number) - 1;
+            total-=1;
+        }
+
       }
       adultElement.innerText = number;
     }

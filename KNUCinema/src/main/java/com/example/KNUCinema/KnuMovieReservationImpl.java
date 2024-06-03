@@ -38,11 +38,11 @@ public class KnuMovieReservationImpl implements  KnuMovieReservation
     public void reserveSeats(int movieId, int[][] seats) {
         for (MovieDTO movie : movies) {
             if (movie.getId() == movieId) {
-                int[][] currentSeats = movie.getSeat();
-                for (int[] seat : seats) {
-                    currentSeats[seat[0]][seat[1]] = 1;
-                }
-                movie.setSeat(currentSeats);
+//                int[][] currentSeats = movie.getSeat();
+//                for (int[] seat : seats) {
+//                    currentSeats[seat[0]][seat[1]] = 1;
+//                }
+                //movie.setSeat(currentSeats);
                 break;
             }
         }
@@ -50,8 +50,8 @@ public class KnuMovieReservationImpl implements  KnuMovieReservation
 
     private void loadMoviesForTheater(int theaterId) {
         movies.clear();
-        movies.add(new MovieDTO(1, "Movie 1", "image1.jpg", "Description 1", new int[10][10]));
-        movies.add(new MovieDTO(2, "Movie 2", "image2.jpg", "Description 2", new int[10][10]));
+        //movies.add(new MovieDTO(1, new Time(10),"Movie 1", "image1.jpg", "Description 1", new int[10][10]));
+        //movies.add(new MovieDTO(2, new Time(10), "Movie 2", "image2.jpg", "Description 2", new int[10][10]));
 
     }
 
