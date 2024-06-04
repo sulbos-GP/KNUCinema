@@ -33,6 +33,7 @@ public class KnuCinemaController {
     public  String test() {
         return "TEST";
     }
+    
 
     @RequestMapping("/Seat/{id}")
     public String seat(@PathVariable("id") int id, Model model)

@@ -8,8 +8,7 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = '21'
 }
 
 configurations {
@@ -33,9 +32,4 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-
-tasks.withType(JavaCompile) {
-    options.fork = true
-    options.forkOptions.executable = "C:\\jdk-21.0.2\\bin\\javac.exe"
 }
