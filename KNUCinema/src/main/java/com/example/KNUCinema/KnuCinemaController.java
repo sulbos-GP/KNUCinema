@@ -87,7 +87,7 @@ public class KnuCinemaController {
 
 
     //영화관 선택후 시간과 이름으로 영화 리스트 보내기?
-    @RequestMapping("/reserve/{id}")
+    @RequestMapping("/reserve/movies")
     public String reserveMovie(@RequestParam("time") String time, @RequestParam("title") String title, Model model) {
         //TODO : 뭔가 이상함
         model.addAttribute("Movie",movieReservation.getMoviesByTime(time,title));
