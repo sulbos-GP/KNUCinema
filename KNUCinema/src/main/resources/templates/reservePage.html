@@ -32,7 +32,7 @@
             <tr>
                 <td class="movieTitleCell" th:data-title="${movies1.title}" th:text="${movies1.title}"></td>
                 <td class="selectDateArea" rowspan="3">
-                    <input type="date" id="datePicker">
+                    <input type="date" id="datePicker" min="0" max="+7">
                 </td>
             </tr>
             <tr>
@@ -65,8 +65,12 @@
     </table>
 
     <script>
+        
+        
+
         document.getElementById('datePicker').addEventListener('change', function() {
             var selectedDate = new Date(this.value);
+            document.getElementById('datePicker').setAttribute("min", selectedDate)
             var week = ['일', '월', '화', '수', '목', '금', '토'];
             var formattedDate = selectedDate.getFullYear() + '년 ' + 
                                 ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '월 ' + 
