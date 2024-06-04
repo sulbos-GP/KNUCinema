@@ -24,58 +24,73 @@
         .seat.selected {
             background-color: red;
         }
+        .seat-selection {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .counter {
+            display: inline-block;
+            margin: 10px;
+        }
+        .counter button {
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+        }
+        .counter input {
+            width: 40px;
+            height: 30px;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+        }
     </style>
 </head>
 <body>
 
-영화 좌석  페이지 <br>
+영화 좌석 페이지 <br>
 
 <img src="/image/TopGun.png" width="100"/>
 
-
+<!--title-->
 <span th:text="${Movie.title}"/>
-<td>
-    <input type='button'
-           onclick='count("plus","adult")'
-           value='+'/>
-    <input type='button'
-           onclick='count("minus","adult")'
-           value='-'/>
-    <div id='adult'>0</div>
-</td>
-<td>
-    <input type='button'
-           onclick='count("plus","teenager")'
-           value='+'/>
-    <input type='button'
-           onclick='count("minus","teenager")'
-           value='-'/>
-    <div id='teenager'>0</div>
-</td>
-<td>
-    <input type='button'
-           onclick='count("plus","old man")'
-           value='+'/>
-    <input type='button'
-           onclick='count("minus","old man")'
-           value='-'/>
-    <div id='old man'>0</div>
-</td>
-<td>
-    <input type='button'
-           onclick='count("plus","Disorder")'
-           value='+'/>
-    <input type='button'
-           onclick='count("minus","Disorder")'
-           value='-'/>
-    <div id='Disorder'>0</div>
-</td>
-<button onclick="sendData()">데이터 전달</button>
-<br>
+<!--인원 선택 Class-->
+<div class="seat-selection">
+    <div>
+        <div class="counter">
+            성인
+            <button onclick='count("plus","adult")'>+</button>
+            <input type="number" id='adult' value='0' readonly>
+            <button onclick='count("minus","adult")'>-</button>
+        </div>
+        <div class="counter">
+            청소년
+            <button onclick='count("plus","teenager")'>+</button>
+            <input type="number" id='teenager' value='0' readonly>
+            <button onclick='count("minus","teenager")'>-</button>
+        </div>
+        <div class="counter">
+            경로
+            <button onclick='count("plus","old man")'>+</button>
+            <input type="number" id='old man' value='0' readonly>
+            <button onclick='count("minus","old man")'>-</button>
+        </div>
+        <div class="counter">
+            장애인
+            <button onclick='count("plus","Disorder")'>+</button>
+            <input type="number" id='Disorder' value='0' readonly>
+            <button onclick='count("minus","Disorder")'>-</button>
+        </div>
+    </div>
+</div>
+<!--시트-->
 <div class="wrapper">
     <div class="container" id="seatContainer"></div>
 </div>
 <script>
+    //total : 전체 선택 가능 인원
+    //curTotal : 현재 선택 인원
     total = 0;
     curTotal = 0;
 </script>
@@ -83,9 +98,11 @@
     // 행과 열의 크기
     const rows = [[${Cinema.seat.row}]];
     const cols = [[${Cinema.seat.col}]];
+    //시트들의 정보를 가져옴(여러개)
     const container = document.getElementById('seatContainer');
-    resetSeat();
+    resetSeat();//시트 정보를 초기화 시킴 (이름은 reset인데 좌석을 동적으로 생성)
     function resetSeat(){
+        console.log("좌석 생성");
         // 좌석 생성 및 이벤트 설정
         for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
             for (let colIndex = 0; colIndex < cols; colIndex++) {
@@ -115,6 +132,7 @@
             }
         }
     }
+    //좌석 정보 초기화
     function testReset()
     {
         allChildren = document.querySelectorAll('.seat.selected');
@@ -125,6 +143,7 @@
             }
     }
 
+    //선택한 좌석들의 정보를 넘기기 위해서 배열 변수에 담기.
     function sendData() {
         const selectedSeats = [];
         document.querySelectorAll('.seat.selected').forEach(seat => {
@@ -135,6 +154,8 @@
             });
         });
 
+        //fetch API를 사용하여 페이지는 Seat/1를 타겟으로 Post전달
+        //JSON 타입으로 controller에 전달
         fetch('/Seat/1', {
             method: 'POST',
             headers: {
@@ -151,26 +172,25 @@
         });
     }
 </script>
+<!--버튼 클릭 시 정해진 페이지로 데이터 전달(컨트롤러로 데이터 전달)-->
+<button onclick="sendData()">데이터 전달</button>
 </body>
+<!-- <인원 선택 클릭 시 정보가 넘어와서 인원을 더하고 뺸다. -->
 <script th:inline="javascript">
     function count(type,valueName)  {
         testReset();
-        const adultElement = document.getElementById(valueName);
+        const counterID = document.getElementById(valueName);
         var idx = [[${Movie.id}]];
 
-        let number = adultElement.innerText;
-
         if(type === 'plus') {
-            number = parseInt(number) + 1;
+            counterID.value = parseInt(counterID.value) + 1;
             total+=1;
         }else if(type === 'minus')  {
-        if(number!=0){
-            number = parseInt(number) - 1;
-            total-=1;
+            if(counterID.value!=0){
+                counterID.value = parseInt(counterID.value) - 1;
+                total-=1;
+            }
         }
-
-      }
-      adultElement.innerText = number;
     }
 </script>
 </html>

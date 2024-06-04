@@ -21,6 +21,11 @@ public class KnuCinemaController {
     public  String home() {
         return "mainPage";
     }
+
+    @RequestMapping("/tests")
+    public  String test() {
+        return "TEST";
+    }
     
 
     @RequestMapping("/Seat/{id}")
@@ -54,6 +59,7 @@ public class KnuCinemaController {
     }
 
     //Seat/1 주소에서 Feach API POST
+    //0 : 빈좌석 1: 성인 2: 청소년 3:경로 4:장애인
     @PostMapping("/Seat/1")
     public ResponseEntity<String> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats) {
         // 좌석 데이터를 처리하는 로직
