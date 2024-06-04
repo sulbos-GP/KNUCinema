@@ -14,14 +14,14 @@ import java.util.Date;
 @NoArgsConstructor
 
 public class CinemaDTO extends MovieDTO {
-    private int id;
+    private int cid; //영화 관 (1,2,3,4 ~)
     private LocalDateTime time;
     private Seat seat;
 
     public CinemaDTO(int id,LocalDateTime time,int[][] seat,MovieDTO movieDTO)
     {
         super(movieDTO);
-        this.id=id;
+        this.cid=id;
         this.time=time;
         this.seat = new Seat(10, 10);
     }

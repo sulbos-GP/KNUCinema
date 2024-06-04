@@ -12,10 +12,10 @@ import java.util.List;
 public class KnuCinemaController {
 
     @Autowired
-    private KnuMovieService movieService;
-
+    private KnuMovieService movieService; //TODO : KnuMovieService -> IKnuMovieService
     @Autowired
-    private KnuMovieReservation movieReservation;
+    private KnuMovieReservation movieReservation;  //TODO : KnuMovieReservation -> IKnuMovieReservation
+
 
     @RequestMapping("/")
     public  String home() {
@@ -41,6 +41,8 @@ public class KnuCinemaController {
     public  String inputPage(){
         return "inputPhoneNumberForm";
     }
+
+
     @GetMapping("/mybook")
     public String checkBook(@RequestParam("phoneNumber") String number, Model model){
         model.addAttribute("phoneNumber",movieService.findPhoneNumber(number));
@@ -59,6 +61,33 @@ public class KnuCinemaController {
         adult++;
     }
 
+    @RequestMapping("/reserve")
+    public String reserve(){
+        //TODO : HTML 연결
+
+        return "";
+    }
+
+    //영화관 아이디 받으면 볼 수 있는 영화 리스트 보내기
+    @RequestMapping("/reserve/{id}")
+    public String reserve(@PathVariable("id") int id, Model model){
+        //TODO : 뭔가 이상함
+        model.addAttribute("Movie",movieReservation.getMoviesByCinemaId(id));
+
+        return "";
+    }
+
+
+    //영화관 선택후 시간과 이름으로 영화 리스트 보내기?
+    @RequestMapping("/reserve/{id}")
+    public String reserveMovie(@RequestParam("time") String time, @RequestParam("title") String title, Model model) {
+        //TODO : 뭔가 이상함
+        model.addAttribute("Movie",movieReservation.getMoviesByTime(time,title));
+
+        return "";
+    }
+
+
     //Seat/1 주소에서 Feach API POST
     //0 : 빈좌석 1: 성인 2: 청소년 3:경로 4:장애인
     @PostMapping("/Seat/1")
@@ -76,6 +105,9 @@ public class KnuCinemaController {
         System.out.println(movieService.findCinemaDTO(1).getSeat());
         return ResponseEntity.ok("Seats successfully");
     }
+
+
+
 
 
     @RequestMapping("/reservation")
