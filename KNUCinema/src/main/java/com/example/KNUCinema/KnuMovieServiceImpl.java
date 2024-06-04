@@ -20,8 +20,15 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         int[][] seat =  new int[10][10];
         for (int[] ints : seat) Arrays.fill(ints,0);
    
-        db.add(new MovieDTO(1,"탑 건","/image/TopGun.png","영화 내용"));
-
+        db.add(new MovieDTO(1,"탑건","/image/TopGun.png","영화 내용"));
+        db.add(new MovieDTO(2,"탑건","/image/TopGun.png","영화 내용"));
+        db.add(new MovieDTO(3,"탑건","/image/TopGun.png","영화 내용"));
+        db.add(new MovieDTO(4,"탑건","/image/TopGun.png","영화 내용"));
+        db.add(new MovieDTO(5,"탑건","/image/TopGun.png","영화 내용"));
+        db.add(new MovieDTO(6,"탑건","/image/TopGun.png","영화 내용"));
+        db.add(new MovieDTO(7,"탑건","/image/TopGun.png","영화 내용"));
+        db.add(new MovieDTO(8,"탑건","/image/TopGun.png","영화 내용"));
+        db.add(new MovieDTO(9,"탑건","/image/TopGun.png","영화 내용"));
         //user 메모리db생성
         userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
 
