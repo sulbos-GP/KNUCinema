@@ -4,6 +4,9 @@ import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,7 +35,7 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         //user 메모리db생성
         userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
 
-        movie.add(new CinemaDTO(1,new Time(1),seat,db.get(0)));
+        movie.add(new CinemaDTO(1, LocalDateTime.now(Clock.systemDefaultZone()),seat,db.get(0)));
     }
 
     @Override

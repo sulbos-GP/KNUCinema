@@ -24,11 +24,6 @@
         .seat.selected {
             background-color: red;
         }
-        .seat-selection {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
         .counter {
             display: inline-block;
             margin: 10px;
@@ -51,43 +46,72 @@
             margin: 20px 0;
             text-align: center;
         }
+        .movie-container {
+            display: flex;
+            align-items: center;
+            margin: 20px;
+        }
+        .movie-poster {
+            width: 150px;
+            margin-right: 20px;
+        }
+        .movie-details {
+            text-align: left;
+        }
+        .age-rating {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #d7a559;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
 
-영화 좌석 페이지 <br>
 
-<img src="/image/TopGun.png" width="100"/>
 
-<!--title-->
-<span th:text="${Movie.title}"/>
-<!--인원 선택 Class-->
-<div class="seat-selection">
-    <div>
-        <div class="counter">
-            성인
-            <button onclick='count("plus","adult")'>+</button>
-            <input type="number" id='adult' value='0' readonly>
-            <button onclick='count("minus","adult")'>-</button>
+
+
+<div>
+    <div class="movie-container">
+        <img src="/image/TopGun.png" alt="${Movie.title}" class="movie-poster"/>
+        <div class="movie-details">
+            <div>
+                <span class="age-rating">15</span>
+                <h2 th:text="${Movie.title}"></h2>
+            </div>
+            <p th:text="${#temporals.format(Cinema.time, 'yy년MM월dd일 | hh:mm')}">24.06.05(수) | 14:00 ~ 16:38</p>
+            <p>KNU Cinema</p>
         </div>
-        <div class="counter">
-            청소년
-            <button onclick='count("plus","teenager")'>+</button>
-            <input type="number" id='teenager' value='0' readonly>
-            <button onclick='count("minus","teenager")'>-</button>
-        </div>
-        <div class="counter">
-            경로
-            <button onclick='count("plus","old man")'>+</button>
-            <input type="number" id='old man' value='0' readonly>
-            <button onclick='count("minus","old man")'>-</button>
-        </div>
-        <div class="counter">
-            장애인
-            <button onclick='count("plus","Disorder")'>+</button>
-            <input type="number" id='Disorder' value='0' readonly>
-            <button onclick='count("minus","Disorder")'>-</button>
-        </div>
+    </div>
+    <!--인원 선택 Class-->
+    <div class="counter">
+        성인
+        <button onclick='count("plus","adult")'>+</button>
+        <input type="number" id='adult' value='0' readonly>
+        <button onclick='count("minus","adult")'>-</button>
+    </div>
+    <div class="counter">
+        청소년
+        <button onclick='count("plus","teenager")'>+</button>
+        <input type="number" id='teenager' value='0' readonly>
+        <button onclick='count("minus","teenager")'>-</button>
+    </div>
+    <div class="counter">
+        경로
+        <button onclick='count("plus","old man")'>+</button>
+        <input type="number" id='old man' value='0' readonly>
+        <button onclick='count("minus","old man")'>-</button>
+    </div>
+    <div class="counter">
+        장애인
+        <button onclick='count("plus","Disorder")'>+</button>
+        <input type="number" id='Disorder' value='0' readonly>
+        <button onclick='count("minus","Disorder")'>-</button>
     </div>
 </div>
 <div class="screen">SCREEN</div>

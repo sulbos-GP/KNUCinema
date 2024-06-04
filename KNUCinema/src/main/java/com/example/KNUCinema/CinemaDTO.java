@@ -3,8 +3,11 @@ package com.example.KNUCinema;
 import lombok.*;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 @Getter @Setter @ToString
 @AllArgsConstructor
@@ -12,10 +15,10 @@ import java.util.Arrays;
 
 public class CinemaDTO extends MovieDTO {
     private int id;
-    private Time time;
+    private LocalDateTime time;
     private Seat seat;
 
-    public CinemaDTO(int id,Time time,int[][] seat,MovieDTO movieDTO)
+    public CinemaDTO(int id,LocalDateTime time,int[][] seat,MovieDTO movieDTO)
     {
         super(movieDTO);
         this.id=id;

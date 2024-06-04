@@ -33,6 +33,7 @@ public class KnuCinemaController {
     {
         model.addAttribute("Movie",movieService.find(id));
         model.addAttribute("Cinema",movieService.findCinemaDTO(id));
+        model.addAttribute("Time",movieService.findCinemaDTO(id).getTime());
         return "Seat";
     }
 
