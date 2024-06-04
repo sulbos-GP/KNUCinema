@@ -30,47 +30,66 @@
         </thead>
         <tbody>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies1.title}" th:text="${movies1.title}"></td>
+                <td id="0" class="movieTitleCell" th:data-title="${movies0.title}" th:text="${movies0.title}" onclick="checkMovieId(this.id)"></td>
                 <td class="selectDateArea" rowspan="3">
-                    <input type="date" id="datePicker" min="0" max="+7">
+                    <input type="date" id="datePicker" th:min="${limitMinDate}" th:max="${limitMaxDate}"  >
                 </td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies2.title}" th:text="${movies2.title}"></td>
+                <td id="1" class="movieTitleCell" th:data-title="${movies1.title}" th:movie-time="${movieTime1.time}" th:text="${movies1.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies3.title}" th:text="${movies3.title}"></td>
+                <td id="2" class="movieTitleCell" th:data-title="${movies2.title}" th:movie-time="${movieTime2.time}" th:text="${movies2.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies4.title}" th:text="${movies4.title}"></td>
-                <td class="selectedMovieTitle">영화제목</td>
+                <td id="3" class="movieTitleCell" th:data-title="${movies3.title}" th:movie-time="${movieTime3.time}" th:text="${movies3.title}" onclick="checkMovieId(this.id)"></td>
+                <td class="selectedMovieTitle">선택 된 영화 없음</td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies5.title}" th:text="${movies5.title}"></td>
-                <td class="selectTime" rowspan="5">시간선택</td>
+                <td id="4" class="movieTitleCell" th:data-title="${movies4.title}" th:movie-time="${movieTime4.time}" th:text="${movies4.title}" onclick="checkMovieId(this.id)"></td>
+                <td class="selectTime" rowspan="6">시간선택</td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies6.title}" th:text="${movies6.title}"></td>
+                <td id="5" class="movieTitleCell" th:data-title="${movies5.title}" th:movie-time="${movieTime5.time}" th:text="${movies5.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies7.title}" th:text="${movies7.title}"></td>
+                <td id="6" class="movieTitleCell" th:data-title="${movies6.title}" th:movie-time="${movieTime6.time}" th:text="${movies6.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies8.title}" th:text="${movies8.title}"></td>
+                <td id="7" class="movieTitleCell" th:data-title="${movies7.title}" th:movie-time="${movieTime7.time}" th:text="${movies7.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies9.title}" th:text="${movies9.title}"></td>
+                <td id="8" class="movieTitleCell" th:data-title="${movies8.title}" th:movie-time="${movieTime8.time}" th:text="${movies8.title}" onclick="checkMovieId(this.id)"></td>
+            </tr>
+            <tr>
+                <td id="9" class="movieTitleCell" th:data-title="${movies9.title}" th:movie-time="${movieTime9.time}" th:text="${movies9.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
         </tbody>
     </table>
 
-    <script>
-        
-        
+    <button onclick="goNextLevel()">다음 단계</button>
 
-        document.getElementById('datePicker').addEventListener('change', function() {
+    <script>
+            var selectedMovieId = -1; // 영화를 선택했는지 확인하기 위한 변수
+            var checkDateSelected = -1; // 날짜를 선택했는지 확인하기 위한 변수
+            function checkMovieId(clickedId){
+                selectedMovieId = clickedId; //DB에 있는 id가 아닌 td태그에 부여한 id임 
+                alert(clickedId);
+            }
+
+            function goNextLevel(){
+                if(selectedMovieId<0)
+                    alert('영화를 선택해 주세요!');
+                else if (checkDateSelected<0)
+                    alert('날짜를 선택해 주세요!');
+                else location.href='/Seat/'+selectedMovieId;
+            }
+
+            document.getElementById('datePicker').addEventListener('change', function() {
+            
+            checkDateSelected = 1; // 날짜 선택했음을 의미
+
             var selectedDate = new Date(this.value);
-            document.getElementById('datePicker').setAttribute("min", selectedDate)
             var week = ['일', '월', '화', '수', '목', '금', '토'];
             var formattedDate = selectedDate.getFullYear() + '년 ' + 
                                 ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '월 ' + 
@@ -82,7 +101,15 @@
         document.querySelectorAll('.movieTitleCell').forEach(function(cell) {
             cell.addEventListener('click', function() {
                 var movieTitle = this.getAttribute('data-title');
-                document.querySelector('.selectedMovieTitle').innerText = movieTitle;
+                document.querySelector('.selectedMovieTitle').innerText = "선택 된 영화 : " + movieTitle;
+
+                var movieTime = this.getAttribute('movie-time');
+                var timeParts = movieTime.split(':');
+                var formattedTime = timeParts[0] + '시 ' + timeParts[1] + '분';
+                document.querySelector('.selectTime').innerText = formattedTime;
+
+
+                
             });
         });
     </script>
