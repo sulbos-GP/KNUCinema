@@ -28,11 +28,6 @@ public class KnuCinemaController {
     }
 
 
-    @RequestMapping("/reserve")
-    public String reservePage(Model model){
-
-        //model.addAttribute("theaterid", movieReservation.selectTheater();)
-
 
 
     @RequestMapping("/Seat/{id}")
