@@ -22,12 +22,6 @@ public class KnuCinemaController {
         return "mainPage";
     }
 
-    @RequestMapping("/Test")
-    public String test(){
-        return "Test";
-    }
-
-
     @RequestMapping("/reserve")
     public String reservePage(Model model){
         //model.addAttribute("theaterid", movieReservation.selectTheater();)
