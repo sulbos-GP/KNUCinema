@@ -1,12 +1,17 @@
 package com.example.KNUCinema;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class KnuCinemaController {
@@ -15,6 +20,8 @@ public class KnuCinemaController {
     private KnuMovieService movieService; //TODO : KnuMovieService -> IKnuMovieService
     @Autowired
     private KnuMovieReservation movieReservation;  //TODO : KnuMovieReservation -> IKnuMovieReservation
+    @Autowired
+    private  KnuMovieServiceImpl knuMovieServiceImpl; // 메모리db에 있는 영화 list 불러오기 위함
 
 
     @RequestMapping("/")
@@ -61,10 +68,12 @@ public class KnuCinemaController {
     }
 
     @RequestMapping("/reserve")
-    public String reserve(){
-        //TODO : HTML 연결
+    public String reserve(Model model){
+        for(int i =0; i<10;i++){
+            model.addAttribute("movies"+i, knuMovieServiceImpl.db.get(i));
+        }
 
-        return "";
+        return "reservePage";
     }
 
     //영화관 아이디 받으면 볼 수 있는 영화 리스트 보내기
