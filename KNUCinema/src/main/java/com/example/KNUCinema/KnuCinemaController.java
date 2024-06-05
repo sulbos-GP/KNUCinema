@@ -34,6 +34,7 @@ public class KnuCinemaController {
     public  String test() {
         return "TEST";
     }
+    
 
     @RequestMapping("/Seat/{id}")
     public String seat(@PathVariable("id") int id, Model model)
@@ -68,7 +69,7 @@ public class KnuCinemaController {
         adult++;
     }
 
-    @RequestMapping("/reserve")
+   /* @RequestMapping("/reserve")
     public String reserve(Model model){
         //선택할 수 있는 날짜를 오늘부터 7일 후 까지만 제약을 두기 위해 작성함
         LocalDate today = LocalDate.now();
@@ -82,15 +83,22 @@ public class KnuCinemaController {
         model.addAttribute("limitMaxDate", today.plusDays(7));
 
         return "reservePage";
-    }
+    }*/
 
     //영화관 아이디 받으면 볼 수 있는 영화 리스트 보내기
     @RequestMapping("/reserve/{id}")
     public String reserve(@PathVariable("id") int id, Model model){
-        //TODO : 뭔가 이상함
-        model.addAttribute("Movie",movieReservation.getMoviesByCinemaId(id));
 
-        return "";
+        LocalDate today = LocalDate.now();
+
+        model.addAttribute("movies",movieReservation.getMoviesByCinemaId(id));
+        model.addAttribute("movieTime",movieReservation.getMoviesByCinemaId(id));
+
+
+        model.addAttribute("limitMinDate", today);
+        model.addAttribute("limitMaxDate", today.plusDays(7));
+
+        return "reservePage";
     }
 
 

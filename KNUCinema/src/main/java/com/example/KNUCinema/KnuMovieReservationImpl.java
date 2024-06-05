@@ -1,5 +1,6 @@
 package com.example.KNUCinema;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -13,44 +14,15 @@ import java.util.Arrays;
 @Service
 public class KnuMovieReservationImpl implements KnuMovieReservation
 {
-    public  ArrayList<CinemaDTO> cinema = new ArrayList<>();
-    public ArrayList<MovieDTO> movies = new ArrayList<>();
-    public ArrayList<UserDTO> userDB = new ArrayList<>();
+    //DB 가져오기
+    @Autowired
+    private DatabaseDAO DB;
+
     private int selectedTheater;
 
     public KnuMovieReservationImpl() {
-        this.movies = new ArrayList<>();
-        this.cinema = new ArrayList<>();
+
         this.selectedTheater = -1;
-
-
-        //Todo : 삭제
-        System.out.println("객체 생성");
-        int[][] seat =  new int[10][10];
-        for (int[] ints : seat) Arrays.fill(ints,0);
-
-        movies.add(new MovieDTO(0, "아바타", "/image/Avatar.png", "영화 내용 10"));
-        movies.add(new MovieDTO(1, "탑건", "/image/TopGun.png", "영화 내용 1"));
-        movies.add(new MovieDTO(2, "인셉션", "/image/Inception.png", "영화 내용 2"));
-        movies.add(new MovieDTO(3, "인터스텔라", "/image/Interstellar.png", "영화 내용 3"));
-        movies.add(new MovieDTO(4, "어벤져스", "/image/Avengers.png", "영화 내용 4"));
-        movies.add(new MovieDTO(5, "기생충", "/image/Parasite.png", "영화 내용 5"));
-        movies.add(new MovieDTO(6, "라라랜드", "/image/LaLaLand.png", "영화 내용 6"));
-        movies.add(new MovieDTO(7, "알라딘", "/image/Aladdin.png", "영화 내용 7"));
-        movies.add(new MovieDTO(8, "조커", "/image/Joker.png", "영화 내용 8"));
-        movies.add(new MovieDTO(9, "토이 스토리", "/image/ToyStory.png", "영화 내용 9"));
-
-
-        //user 메모리db생성
-        userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
-
-
-        LocalDate startDate = LocalDate.now();
-        for (int i = 0; i < 10; i++) {
-            LocalDate currentDate = startDate.plusDays(i);
-            cinema.add(new CinemaDTO(1, currentDate.atStartOfDay(), seat, movies.get(i)));
-        }
-
 
     }
 
@@ -59,14 +31,15 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
     public ArrayList<CinemaDTO> getMoviesByTime(String time) {  
         //시간으로 시네마 DTO 받기
         ArrayList<CinemaDTO> currentList = new ArrayList<>();
-
-        cinema.stream()
+        DB.getCinema().stream()
                 .filter(m -> m.getTime().equals(time))
                 .forEach(currentList::add);
 
 
         return currentList;
     }
+
+
 
     @Override
     public ArrayList<CinemaDTO> getMoviesByTime(String time, String title) {
@@ -76,7 +49,7 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(time, formatter);
 
-        cinema.stream()
+        DB.getCinema().stream()
                 .filter(m -> m.getTime().equals(localDate) && m.getTitle().equals(title))
                 .forEach(currentList::add);
 
@@ -84,12 +57,15 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
 
     }
 
+
+
+
     @Override
     public ArrayList<CinemaDTO> getMoviesByCinemaId(int id) {
         // 시네마 아이디에 따라 볼수 있는 영화 찾기
         ArrayList<CinemaDTO> currentList = new ArrayList<>();
 
-        cinema.stream()
+        DB.getCinema().stream()
                 .filter(m -> m.getCid() == id)
                 .forEach(currentList::add);
 
@@ -103,9 +79,56 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
     }
 
 
+    @Override
+    public ArrayList<ReservationDTO> getReservationById(String number){
+        //전화 번호로 예약 정보 가져오기
+        ArrayList<ReservationDTO> reservationList = new ArrayList<>();
 
-   
+        try {
+            long id = DB.getUser().stream().filter(u -> u.getPhoneNumber() == number)
+                    .findFirst().orElseThrow(() -> new Exception("없는 번호")).getId();
 
+            DB.getReservation().stream()
+                    .filter(m -> m.getUserId() == id)
+                    .forEach(reservationList::add);
+
+        } catch (Exception e) {
+            System.err.println("Error occurred while filtering reservations: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return  reservationList;
+    }
+
+    @Override
+    public ArrayList<ReservationDTO> getReservationById(long uesrId) {
+        // 유저 아이디로 예약정보 가져오기
+        ArrayList<ReservationDTO> reservationList = new ArrayList<>();
+        try{
+            DB.getReservation().stream()
+                .filter(m -> m.getUserId() == uesrId)
+                .forEach(reservationList::add);
+
+
+        } catch (Exception e) {
+            System.err.println("Error occurred while filtering reservations: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return reservationList;
+    }
+
+
+    @Override
+    public ArrayList<ReservationDTO> setReservation(CinemaDTO cinema, int UserId)
+    {
+        //예약한후 그 예약자 아이디에 관한 모든 예약 정보 가져오기
+        
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setCinema(cinema);
+        reservationDTO.setUserId(UserId);
+        
+        return DB.setReservation(reservationDTO);
+    }
 
 
 
