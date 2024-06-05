@@ -1,5 +1,6 @@
 package com.example.KNUCinema;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,9 +71,16 @@ public class KnuCinemaController {
 
     @RequestMapping("/reserve")
     public String reserve(Model model){
+        //선택할 수 있는 날짜를 오늘부터 7일 후 까지만 제약을 두기 위해 작성함
+        LocalDate today = LocalDate.now();
+
         for(int i =0; i<10;i++){
-            model.addAttribute("movies"+i, knuMovieServiceImpl.db.get(i));
+            model.addAttribute("movies"+i, knuMovieServiceImpl.db.get(i));     
+            model.addAttribute("movieTime"+i, knuMovieServiceImpl.movie.get(i));
         }
+
+        model.addAttribute("limitMinDate", today);
+        model.addAttribute("limitMaxDate", today.plusDays(7));
 
         return "reservePage";
     }

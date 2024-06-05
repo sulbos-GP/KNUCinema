@@ -1,86 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
     <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         .tablecontainer {
+            position: relative;
             margin-left: auto;
             margin-right: auto;
             text-align: center;
-            width: 50%;
+            width: 80%;
             height: 500px;
             margin-top: 5%;
             border-collapse: collapse;
         }
-        .movieTitleCell {
+
+        .selectMovie,
+        .selectedDate {
+            height: 100px;
+            font-size: 35px;
+            background-color: rgb(252, 246, 238);
+        }
+
+        .movieTitleCell:hover {
             cursor: pointer;
+            background-color: rgb(235, 235, 235);
+            border-top: 2px solid rgb(173, 40, 0);
+            /* 위쪽 테두리 색상 변경 */
+            border-bottom: 2px solid rgb(173, 40, 0);
+            border-left: 2px solid rgb(173, 40, 0);
+            border-right: 2px solid rgb(173, 40, 0);
+            /* 오른쪽 테두리 색상 변경 */
+        }
+
+        .prevBtn{
+            cursor: pointer;
+            width: 10%;
+            height: 100px;
+            background: none;
+            margin-bottom: 20px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            margin-left: 148px;
+        }
+
+        .prevBtn:hover{
+            background-color: #c9c9c9;
+        }
+
+        .nextBtn {
+            cursor: pointer;
+            width: 180px;
+            height: 130px;
+            background: none;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin-bottom: 20px;
+            margin-right: 148px;
+            border: 1px solid #000;
+            display: flex;
+            /* Flexbox 레이아웃 적용 */
+            flex-direction: column;
+            /* 요소들을 세로 방향으로 배치 */
+            align-items: center;
+            /* 요소들을 수직 중앙 정렬 */
+        }
+
+        .nextBtn:hover{
+            background-color: #f73c2f;
+        }
+
+        .nextBtn img {
+            max-width: 100%;
+            max-height: 60%;
+            /* 이미지가 버튼의 50%를 차지하도록 설정 */
+            margin-bottom: 10px;
+            /* 이미지 아래에 간격 추가 */
+        }
+
+        .nextBtn span {
+            font-size: 30px;
         }
     </style>
 </head>
+
 <body>
     <table class="tablecontainer" border="1">
         <thead>
             <tr>
-                <th>영화 선택</th>
+                <th class="selectMovie">영화 선택</th>
                 <th class="selectedDate">선택된 날짜</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies1.title}" th:text="${movies1.title}"></td>
+                <td id="0" class="movieTitleCell" th:data-title="${movies0.title}" th:text="${movies0.title}"
+                    onclick="checkMovieId(this.id)"></td>
                 <td class="selectDateArea" rowspan="3">
-                    <input type="date" id="datePicker">
+                    <input type="date" id="datePicker" th:min="${limitMinDate}" th:max="${limitMaxDate}">
                 </td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies2.title}" th:text="${movies2.title}"></td>
+                <td id="1" class="movieTitleCell" th:data-title="${movies1.title}" th:movie-time="${movieTime1.time}"
+                    th:text="${movies1.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies3.title}" th:text="${movies3.title}"></td>
+                <td id="2" class="movieTitleCell" th:data-title="${movies2.title}" th:movie-time="${movieTime2.time}"
+                    th:text="${movies2.title}" onclick="checkMovieId(this.id)">asdfasdf</td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies4.title}" th:text="${movies4.title}"></td>
-                <td class="selectedMovieTitle">영화제목</td>
+                <td id="3" class="movieTitleCell" th:data-title="${movies3.title}" th:movie-time="${movieTime3.time}"
+                    th:text="${movies3.title}" onclick="checkMovieId(this.id)"></td>
+                <td class="selectedMovieTitle">선택 된 영화 없음</td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies5.title}" th:text="${movies5.title}"></td>
-                <td class="selectTime" rowspan="5">시간선택</td>
+                <td id="4" class="movieTitleCell" th:data-title="${movies4.title}" th:movie-time="${movieTime4.time}"
+                    th:text="${movies4.title}" onclick="checkMovieId(this.id)"></td>
+                <td class="selectTime" rowspan="6">시간선택</td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies6.title}" th:text="${movies6.title}"></td>
+                <td id="5" class="movieTitleCell" th:data-title="${movies5.title}" th:movie-time="${movieTime5.time}"
+                    th:text="${movies5.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies7.title}" th:text="${movies7.title}"></td>
+                <td id="6" class="movieTitleCell" th:data-title="${movies6.title}" th:movie-time="${movieTime6.time}"
+                    th:text="${movies6.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies8.title}" th:text="${movies8.title}"></td>
+                <td id="7" class="movieTitleCell" th:data-title="${movies7.title}" th:movie-time="${movieTime7.time}"
+                    th:text="${movies7.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
             <tr>
-                <td class="movieTitleCell" th:data-title="${movies9.title}" th:text="${movies9.title}"></td>
+                <td id="8" class="movieTitleCell" th:data-title="${movies8.title}" th:movie-time="${movieTime8.time}"
+                    th:text="${movies8.title}" onclick="checkMovieId(this.id)"></td>
+            </tr>
+            <tr>
+                <td id="9" class="movieTitleCell" th:data-title="${movies9.title}" th:movie-time="${movieTime9.time}"
+                    th:text="${movies9.title}" onclick="checkMovieId(this.id)"></td>
             </tr>
         </tbody>
     </table>
 
+    <div>
+        <button class="prevBtn" onclick="{()=>location.href='127.0.0.1/'}">
+            이전으로
+        </button>
+        <button class="nextBtn" onclick="goNextLevel()">
+            <img src="/image/nextIcon.png" alt="다음버튼">
+            <span>다음단계</span>
+        </button>
+
+    </div>
+
     <script>
-        document.getElementById('datePicker').addEventListener('change', function() {
+        var selectedMovieId = -1; // 영화를 선택했는지 확인하기 위한 변수
+        var checkDateSelected = -1; // 날짜를 선택했는지 확인하기 위한 변수
+        function checkMovieId(clickedId) {
+            selectedMovieId = clickedId; //DB에 있는 id가 아닌 td태그에 부여한 id임 
+
+        }
+        function goNextLevel() {
+            if (selectedMovieId < 0)
+                alert('영화를 선택해 주세요!');
+            else if (checkDateSelected < 0)
+                alert('날짜를 선택해 주세요!');
+            else location.href = '/Seat/' + selectedMovieId;
+        }
+
+        document.getElementById('datePicker').addEventListener('change', function () {
+
+            checkDateSelected = 1; // 날짜 선택했음을 의미
+
             var selectedDate = new Date(this.value);
             var week = ['일', '월', '화', '수', '목', '금', '토'];
-            var formattedDate = selectedDate.getFullYear() + '년 ' + 
-                                ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '월 ' + 
-                                ('0' + selectedDate.getDate()).slice(-2) + '일 ' +
-                                week[selectedDate.getDay()] + '요일';
+            var formattedDate = selectedDate.getFullYear() + '년 ' +
+                ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '월 ' +
+                ('0' + selectedDate.getDate()).slice(-2) + '일 ' +
+                week[selectedDate.getDay()] + '요일';
             document.querySelector('.selectedDate').innerText = formattedDate;
         });
 
-        document.querySelectorAll('.movieTitleCell').forEach(function(cell) {
-            cell.addEventListener('click', function() {
+        document.querySelectorAll('.movieTitleCell').forEach(function (cell) {
+
+            cell.addEventListener('click', function () {
                 var movieTitle = this.getAttribute('data-title');
-                document.querySelector('.selectedMovieTitle').innerText = movieTitle;
+                document.querySelector('.selectedMovieTitle').innerText = "선택 된 영화 : " + movieTitle;
+
+                var movieTime = this.getAttribute('movie-time');
+                var timeParts = movieTime.split(':');
+                var formattedTime = timeParts[0] + '시 ' + timeParts[1] + '분';
+                document.querySelector('.selectTime').innerText = formattedTime;
+
+
+
             });
         });
     </script>
 </body>
+
 </html>

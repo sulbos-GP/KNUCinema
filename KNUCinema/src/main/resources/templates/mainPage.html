@@ -4,34 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KNU Cinema</title>
-
     <h1>KNU Cinema</h1>
-
     <style>
-        html, body{
+        html, body {
             height: 100%;
             margin: 0;
-        }
-        table{
-            width: 100%;
-            height: 50%;
-            border-collapse: collapse;
+            padding: 0;
         }
 
-        td{
-            width: 50%;
-            height: 50%;
-            border: 1px solid #000;
+        h1{
+            margin-top: 5%;
             text-align: center;
+            font-size: 60px;
         }
+
+        .buttonContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        button {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            width: 40%;
+            height: 400px;
+            border: 1px solid #000;
+            margin: 0 10% 10% 10%;    
+            margin-top: -90px;  
+            border-radius: 30px;
+            cursor: pointer;
+            background: none;
+        }
+
+        button:hover{
+            background-color:rgba(255, 251, 243, 0.952);
+        }
+
+        button img {
+            width: 30%;
+        }
+
+        button span {
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
-    <table border="1" style="border-collapse: collapse;">
-        <tr>    
-            <td onClick="location.href='/reserve'" style="cursor:pointer;">영화 예약</td>
-            <td onClick="location.href='/checkbook'" style="cursor:pointer;">예약 조회</td>
-        </tr>
-    </table>
+    <div class="buttonContainer">     
+        <button onClick="location.href='/reserve'">
+            <img src="/image/ticketImg.png" alt="티켓아이콘">
+            <span>영화 예약</span>
+        </button>
+        <button onClick="location.href='/checkbook'">
+            <img src="/image/serchImg.png" alt="돋보기아이콘">
+            <span>예약 조회</span>
+        </button>     
+    </div>
 </body>
 </html>

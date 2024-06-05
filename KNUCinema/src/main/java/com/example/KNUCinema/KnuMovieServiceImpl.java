@@ -1,14 +1,10 @@
 package com.example.KNUCinema;
 
-import org.apache.catalina.User;
-import org.springframework.stereotype.Service;
-
-import java.sql.Time;
-import java.time.Clock;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class KnuMovieServiceImpl implements KnuMovieService {
@@ -38,13 +34,14 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         //user 메모리db생성
         userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
 
+        
 
         LocalDate startDate = LocalDate.now();
         for (int i = 0; i < 10; i++) {
             LocalDate currentDate = startDate.plusDays(i);
             movie.add(new CinemaDTO(1, currentDate.atStartOfDay(), seat, db.get(i)));
         }
-
+        
     }
 
     @Override
