@@ -39,6 +39,8 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
         return currentList;
     }
 
+
+
     @Override
     public ArrayList<CinemaDTO> getMoviesByTime(String time, String title) {
         //시간과 이름으로 시네마 DTO 받기
@@ -77,9 +79,56 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
     }
 
 
+    @Override
+    public ArrayList<ReservationDTO> getReservationById(String number){
+        //전화 번호로 예약 정보 가져오기
+        ArrayList<ReservationDTO> reservationList = new ArrayList<>();
 
-   
+        try {
+            long id = DB.getUser().stream().filter(u -> u.getPhoneNumber() == number)
+                    .findFirst().orElseThrow(() -> new Exception("없는 번호")).getId();
 
+            DB.getReservation().stream()
+                    .filter(m -> m.getUserId() == id)
+                    .forEach(reservationList::add);
+
+        } catch (Exception e) {
+            System.err.println("Error occurred while filtering reservations: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return  reservationList;
+    }
+
+    @Override
+    public ArrayList<ReservationDTO> getReservationById(long uesrId) {
+        // 유저 아이디로 예약정보 가져오기
+        ArrayList<ReservationDTO> reservationList = new ArrayList<>();
+        try{
+            DB.getReservation().stream()
+                .filter(m -> m.getUserId() == uesrId)
+                .forEach(reservationList::add);
+
+
+        } catch (Exception e) {
+            System.err.println("Error occurred while filtering reservations: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return reservationList;
+    }
+
+
+    @Override
+    public ArrayList<ReservationDTO> setReservation(CinemaDTO cinema, int UserId)
+    {
+        //예약한후 그 예약자 아이디에 관한 모든 예약 정보 가져오기
+        
+        ReservationDTO reservationDTO = new ReservationDTO();
+        reservationDTO.setCinema(cinema);
+        reservationDTO.setUserId(UserId);
+        
+        return DB.setReservation(reservationDTO);
+    }
 
 
 

@@ -1,5 +1,5 @@
 package com.example.KNUCinema;
-
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -42,10 +42,17 @@ public class DataBaseImple implements DatabaseDAO{
 
 
 
-
+    @Getter
     public ArrayList<CinemaDTO> cinema = new ArrayList<>();
-    public ArrayList<MovieDTO> movies = new ArrayList<>();
-    public ArrayList<UserDTO> userDB = new ArrayList<>();
+
+    @Getter
+    public  ArrayList<MovieDTO> movies = new ArrayList<>();
+
+    @Getter
+    public  ArrayList<UserDTO> userDB = new ArrayList<>();
+
+    @Getter
+    public  ArrayList<ReservationDTO> reservationDB = new ArrayList<>();
 
 
     @Override
@@ -54,8 +61,36 @@ public class DataBaseImple implements DatabaseDAO{
     }
 
     @Override
-    public ArrayList<MovieDTO> getMovieD() {
+    public ArrayList<MovieDTO> getMovie() {
         return movies;
+    }
+
+    @Override
+    public ArrayList<ReservationDTO> getReservation() {
+        return reservationDB;
+    }
+
+
+
+
+    @Override
+    public ArrayList<ReservationDTO> setReservation(ReservationDTO reservationDTO) {
+        ArrayList<ReservationDTO> reservationList = new ArrayList<>();
+
+        reservationDTO.setId(reservationDB.stream().count());
+        reservationDB.add(reservationDTO);
+
+
+        try {
+            reservationDB.stream()
+                    .filter(m -> m.getUserId() == reservationDTO.getUserId())
+                    .forEach(reservationList::add);
+        } catch (Exception e) {
+            System.err.println("Error occurred while filtering reservations: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return reservationList;
     }
 
     @Override

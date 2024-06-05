@@ -6,6 +6,12 @@ public interface DatabaseDAO {
 
 
     ArrayList<CinemaDTO> getCinema();
-    ArrayList<MovieDTO> getMovieD();
+    ArrayList<MovieDTO> getMovie();
+    ArrayList<ReservationDTO> getReservation();
+
+
+
+    ArrayList<ReservationDTO> setReservation(ReservationDTO reservationDTO) ;
+
     ArrayList<UserDTO> getUser();
 }
