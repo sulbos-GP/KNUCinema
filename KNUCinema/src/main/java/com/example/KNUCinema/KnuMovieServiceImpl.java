@@ -1,9 +1,5 @@
 package com.example.KNUCinema;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +36,12 @@ public class KnuMovieServiceImpl implements KnuMovieService {
 
         UserDTO findNumber = DB.getUser().stream().filter(m->m.getPhoneNumber().equals(phoneNumber)).findFirst().get();
         return findNumber;
+    }
+
+    //이름으로 예약 조회 (이름과 휴대폰 번호로 예약 조회해야하기 때문에 필요함)
+    public UserDTO findName(String name){
+        UserDTO findName = DB.getUser().stream().filter(m->m.getName().equals(name)).findFirst().get();
+        return  findName;
     }
 
 
