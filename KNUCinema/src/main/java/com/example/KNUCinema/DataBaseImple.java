@@ -28,8 +28,10 @@ public class DataBaseImple implements DatabaseDAO{
         movies.add(new MovieDTO(9, "토이 스토리", "/image/ToyStory.png", "영화 내용 9"));
 
 
+
+
         //user 메모리db생성
-        userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
+        //userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
 
 
         LocalDate startDate = LocalDate.now();
@@ -54,11 +56,6 @@ public class DataBaseImple implements DatabaseDAO{
     @Getter
     public  ArrayList<ReservationDTO> reservationDB = new ArrayList<>();
 
-
-    @Override
-    public ArrayList<CinemaDTO> getCinema() {
-        return cinema;
-    }
 
     @Override
     public ArrayList<MovieDTO> getMovie() {

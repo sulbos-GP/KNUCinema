@@ -86,18 +86,14 @@ public class KnuCinemaController {
     }*/
 
     //영화관 아이디 받으면 볼 수 있는 영화 리스트 보내기
-    @RequestMapping("/reserve/{id}")
-    public String reserve(@PathVariable("id") int id, Model model){
-
+    @RequestMapping("/reserve")
+    public String reserve(Model model){
+        int id = 1;
         LocalDate today = LocalDate.now();
-
         model.addAttribute("movies",movieReservation.getMoviesByCinemaId(id));
         model.addAttribute("movieTime",movieReservation.getMoviesByCinemaId(id));
-
-
         model.addAttribute("limitMinDate", today);
         model.addAttribute("limitMaxDate", today.plusDays(7));
-
         return "reservePage";
     }
 

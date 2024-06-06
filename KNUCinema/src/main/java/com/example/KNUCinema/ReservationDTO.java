@@ -7,6 +7,8 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+
+
 public class ReservationDTO {
     private long id;
     private CinemaDTO cinema;
