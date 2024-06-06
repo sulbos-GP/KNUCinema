@@ -2,7 +2,7 @@ package com.example.KNUCinema;
 
 import java.util.ArrayList;
 
-public interface DatabaseDAO {
+public interface DatabaseDAO  {
 
 
     ArrayList<CinemaDTO> getCinema();
