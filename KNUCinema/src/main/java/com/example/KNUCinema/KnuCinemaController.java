@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -113,6 +114,8 @@ public class KnuCinemaController {
                     return new CinemaListDTO(representative, times);
                 })
                 .collect(Collectors.toCollection(ArrayList::new));
+
+        list.sort(Comparator.comparingInt(CinemaListDTO::getId));
 
         model.addAttribute("movies", list);
         //model.addAttribute("movies", movieReservation.getAllMovies());
