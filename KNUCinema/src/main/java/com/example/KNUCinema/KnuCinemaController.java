@@ -2,7 +2,6 @@ package com.example.KNUCinema;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +40,10 @@ public class KnuCinemaController {
     }
     
 
-    @RequestMapping("/Seat/{id}")
-    public String seat(@PathVariable("id") int id, Model model)
+    @PostMapping("/Seat/{id}")
+    public String seat(@PathVariable("id") int id, Model model ,@RequestParam String selectedValue)
     {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+selectedValue);
         model.addAttribute("Movie",movieService.find(id));
         model.addAttribute("Cinema",movieService.findCinemaDTO(id));
         model.addAttribute("Time",movieService.findCinemaDTO(id).getTime());
