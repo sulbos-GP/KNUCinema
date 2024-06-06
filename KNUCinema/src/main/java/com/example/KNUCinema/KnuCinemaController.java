@@ -50,6 +50,7 @@ public class KnuCinemaController {
         return "Seat";
     }
 
+    //예약 조회 누르면 이름과 휴대폰 번호 입력하는 화면
     @RequestMapping("/checkbook")
     public  String inputPage(){
         return "inputPhoneNumberForm";

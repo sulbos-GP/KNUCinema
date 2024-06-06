@@ -7,8 +7,17 @@
 </head>
 <body>
 <form action="/mybook" method="get">
-    <input type="text" name="phoneNumber">
-    <input type="submit" value="검색">
+    <input type="text" name="phoneNumber" id="phoneForm">
+    <input type="submit" value="검색" onclick="clickEvent()">
 </form>
+
+ <script>
+    function clickEvent(){
+    if(document.getElementById('phoneForm').value == null)
+    {
+        alert('휴대폰 번호를 입력해주세요!');
+    }
+    }
+ </script>
 </body>
 </html>

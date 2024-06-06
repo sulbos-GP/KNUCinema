@@ -1,10 +1,11 @@
 package com.example.KNUCinema;
-import lombok.Getter;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import org.springframework.stereotype.Service;
+
+import lombok.Getter;
 
 
 @Service
@@ -28,10 +29,8 @@ public class DataBaseImple implements DatabaseDAO{
         movies.add(new MovieDTO(9, "토이 스토리", "/image/ToyStory.png", "영화 내용 9"));
 
 
-
-
-        //user 메모리db생성
-        //userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
+       // 테스트용 더미 user 메모리db생성
+        userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
 
 
         LocalDate startDate = LocalDate.now();
