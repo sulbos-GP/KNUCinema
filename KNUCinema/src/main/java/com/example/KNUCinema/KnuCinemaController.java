@@ -1,7 +1,12 @@
 package com.example.KNUCinema;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -90,11 +95,49 @@ public class KnuCinemaController {
     public String reserve(Model model){
         int id = 1;
         LocalDate today = LocalDate.now();
-        model.addAttribute("movies",movieReservation.getMoviesByCinemaId(id));
-        model.addAttribute("movieTime",movieReservation.getMoviesByCinemaId(id));
+
+
+
+        List<CinemaDTO> allMovies = movieReservation.getAllMovies();
+
+        Map<String, List<CinemaDTO>> groupedByTitle = allMovies.stream()
+                .collect(Collectors.groupingBy(CinemaDTO::getTitle));
+
+        ArrayList<CinemaListDTO> list = groupedByTitle.entrySet().stream()
+                .map(entry -> {
+                    String title = entry.getKey();
+                    ArrayList<LocalDateTime> times = entry.getValue().stream()
+                            .map(CinemaDTO::getTime)
+                            .collect(Collectors.toCollection(ArrayList::new));
+                    CinemaDTO representative = entry.getValue().get(0);
+                    return new CinemaListDTO(representative, times);
+                })
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        model.addAttribute("movies", list);
+        //model.addAttribute("movies", movieReservation.getAllMovies());
+        //model.addAttribute("movieTime",movieReservation.getMoviesByCinemaId(id));
+
+
+
+
         model.addAttribute("limitMinDate", today);
         model.addAttribute("limitMaxDate", today.plusDays(7));
         return "reservePage";
+    }
+
+
+    @GetMapping("/userForm")
+    public String showForm(Model model) {
+        model.addAttribute("user", new UserDTO());
+        return "userForm"; // Thymeleaf 템플릿 이름
+    }
+
+    @PostMapping("/userForm")
+    public String submitForm(UserDTO user, Model model) {
+        // 폼 처리 로직
+        model.addAttribute("user", user);
+        return "userResult"; // 결과를 보여줄 템플릿 이름
     }
 
 

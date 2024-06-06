@@ -37,7 +37,10 @@ public class DataBaseImple implements DatabaseDAO{
         LocalDate startDate = LocalDate.now();
         for (int i = 0; i < 10; i++) {
             LocalDate currentDate = startDate.plusDays(i);
-            cinema.add(new CinemaDTO(1, currentDate.atStartOfDay(), seat, movies.get(i)));
+
+            for (int j = 1; j < 5; j++) {
+                cinema.add(new CinemaDTO(j, currentDate.atStartOfDay().plusHours(3 * j), seat, movies.get(i)));
+            }
         }
     }
 
