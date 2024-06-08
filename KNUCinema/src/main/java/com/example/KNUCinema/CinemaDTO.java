@@ -18,12 +18,12 @@ public class CinemaDTO extends MovieDTO {
     private LocalDateTime time;
     private Seat seat;
 
-    public CinemaDTO(long id,LocalDateTime time,int[][] seat,MovieDTO movieDTO)
+    public CinemaDTO(long id,LocalDateTime time,Seat seat,MovieDTO movieDTO)
     {
         super(movieDTO);
         this.cid=id;
         this.time=time;
-        this.seat = new Seat(10, 10);
+        this.seat = seat;
     }
 
     @Getter @Setter @ToString

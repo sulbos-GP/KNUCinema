@@ -203,11 +203,13 @@ public class KnuCinemaController {
                                                @RequestParam("number") String number) {
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
+        String reserSeat ="";
         int[][] seatArray = movieService.findCinemaDTO(1).getSeat().getSeat();
         for(int i=0;i<seats.size();i++)
         {
             CinemaDTO.Seat index = seats.get(i);
             seatArray[index.getRow()][index.getCol()] = 1;
+            reserSeat+=index.getRow()+""+index.getCol();
         }
 
 
@@ -215,7 +217,7 @@ public class KnuCinemaController {
 
         movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
         UserDTO userDTO =  movieService.findUser(number);
-        movieReservation.setReservation(movieService.findCinemaDTO(1),userDTO.getId());
+        movieReservation.setReservation(movieService.findCinemaDTO(1),userDTO.getId(),reserSeat);
 
 
 
