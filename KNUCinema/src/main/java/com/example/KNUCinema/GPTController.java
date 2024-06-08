@@ -10,7 +10,7 @@ public class GPTController {
     private DatabaseDAO DB;
 
     @Autowired
-    private final ChatGptService chatGptService;
+    private ChatGptService chatGptService;
 
     public GPTController(ChatGptService chatGptService) {
         this.chatGptService = chatGptService;

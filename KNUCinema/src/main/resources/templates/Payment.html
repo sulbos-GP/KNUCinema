@@ -6,5 +6,21 @@
 </head>
 <body>
     <h3>결제 완료</h3>
+    <script>
+        fetch('/question', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        question: "Your initial question here",
+        additionalField: "Additional data"
+    })
+})
+.then(response => response.text())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+
+    </script>
 </body>
 </html>
