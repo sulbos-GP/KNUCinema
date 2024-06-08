@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import lombok.Getter;
@@ -60,6 +61,9 @@ public class DataBaseImple implements DatabaseDAO{
 
     @Getter
     public  ArrayList<ReservationDTO> reservationDB = new ArrayList<>();
+
+    @Getter @Setter
+    public RecommendDTO recommendDTO = new RecommendDTO();
 
 
     @Override
