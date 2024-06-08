@@ -55,7 +55,12 @@ public class KnuCinemaController {
 
     @GetMapping("/mybook")
     public String checkBook(@RequestParam("phoneNumber") String number, Model model){
-        model.addAttribute("phoneNumber",movieService.findPhoneNumber(number));
+
+        UserDTO user = movieService.findUser(number);
+        model.addAttribute("UserDatas",user);
+
+        ArrayList<ReservationDTO> reservations = movieReservation.getReservationById(user.getId());
+        model.addAttribute("ReservationDatas", reservations);
         return "checkBook";
     }
 

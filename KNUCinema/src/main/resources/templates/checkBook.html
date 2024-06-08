@@ -6,7 +6,26 @@
 </head>
 <body>
 
-   <p>예약자: <span th:text = "${phoneNumber.name}"> </span> </p>
-   <p>예약한 영화: <span th:text = "${phoneNumber.movieTitle}"> </span> </p>
+<p>예약자 성함: <span th:text="${UserDatas.name}"></span></p>
+<p>연락처: <span th:text="${UserDatas.phoneNumber}"></span></p>
+<p>나이 <span th:text="${UserDatas.age}"></span></p>
+
+<div th:if="${#lists.isEmpty(ReservationDatas)}">
+    <p>예약한 내용이 없습니다</p>
+</div>
+<div th:unless="${#lists.isEmpty(ReservationDatas)}">
+    <p>예약 내용:</p>
+    <ul>
+        <li th:each="reservation : ${ReservationDatas}">
+            <p>예약한 영화: <span th:text="${reservation.cinema.title}"></span></p>
+            <p>예약 영화 사진: <span th:text="${reservation.cinema.image}"></span></p>
+            <p>예약 시간: <span th:text="${reservation.cinema.time}"></span></p>
+            <p>예약 좌석 row: <span th:text="${reservation.cinema.seat.row}"></span></p>
+            <p>예약 좌석 col: <span th:text="${reservation.cinema.seat.col}"></span></p>
+
+        </li>
+    </ul>
+</div>
+
 </body>
 </html>

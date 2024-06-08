@@ -1,5 +1,6 @@
 package com.example.KNUCinema;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -41,6 +42,8 @@ public class DataBaseImple implements DatabaseDAO{
                 cinema.add(new CinemaDTO(j, currentDate.atStartOfDay().plusHours(3 * j), seat, movies.get(i)));
             }
         }
+
+        reservationDB.add(new ReservationDTO(0,new CinemaDTO(1, LocalDate.now().atTime(1,1), seat, movies.get(1)), 1));
     }
 
 
