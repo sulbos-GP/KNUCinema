@@ -53,6 +53,7 @@ public class KnuCinemaController {
 
 
         model.addAttribute("Movie",movieService.find(id));
+        model.addAttribute("number",user);
         model.addAttribute("selectedValue",selectedValue);
         model.addAttribute("Cinema",cinemaDTO);
         model.addAttribute("Time",cinemaDTO.getTime());
@@ -205,7 +206,6 @@ public class KnuCinemaController {
                                                @RequestParam("number") String number) {
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
-        System.out.println(number);
         int[][] seatArray = movieService.findCinemaDTO(1).getSeat().getSeat();
         for(int i=0;i<seats.size();i++)
         {
@@ -214,10 +214,13 @@ public class KnuCinemaController {
         }
 
 
-        //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
-
         movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
+        UserDTO userDTO =  movieService.findUser(number);
+
         System.out.println(movieService.findCinemaDTO(1).getSeat());
+
+        movieReservation.setReservation(movieService.findCinemaDTO(1),userDTO.getId());
+
         return ResponseEntity.ok("Seats successfully");
     }
 

@@ -32,7 +32,7 @@ public class DataBaseImple implements DatabaseDAO{
 
 
        // 테스트용 더미 user 메모리db생성
-        userDB.add(new UserDTO(1,"홍성현",26,"01092059813"));
+        userDB.add(new UserDTO(0,"홍성현",26,"01092059813"));
 
 
         LocalDate startDate = LocalDate.now();

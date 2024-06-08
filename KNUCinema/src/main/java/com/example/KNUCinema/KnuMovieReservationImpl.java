@@ -124,7 +124,7 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
 
 
     @Override
-    public ArrayList<ReservationDTO> setReservation(CinemaDTO cinema, int UserId)
+    public ArrayList<ReservationDTO> setReservation(CinemaDTO cinema, long UserId)
     {
         //예약한후 그 예약자 아이디에 관한 모든 예약 정보 가져오기
         
