@@ -30,7 +30,7 @@ public class DataBaseImple implements DatabaseDAO{
 
 
        // 테스트용 더미 user 메모리db생성
-        userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
+        userDB.add(new UserDTO(1,"홍성현",26,"01092059813"));
 
 
         LocalDate startDate = LocalDate.now();
@@ -91,6 +91,16 @@ public class DataBaseImple implements DatabaseDAO{
 
         return reservationList;
     }
+
+    @Override
+    public void setUserData(UserDTO userDTO) {
+
+        userDTO.setId(userDB.stream().count());
+        userDB.add(userDTO);
+
+    }
+
+
 
     @Override
     public ArrayList<UserDTO> getUser() {
