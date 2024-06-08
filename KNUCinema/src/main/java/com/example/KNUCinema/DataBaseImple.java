@@ -1,13 +1,12 @@
 package com.example.KNUCinema;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import lombok.Getter;
+import lombok.Setter;
 
 
 @Service
@@ -32,7 +31,7 @@ public class DataBaseImple implements DatabaseDAO{
 
 
        // 테스트용 더미 user 메모리db생성
-        userDB.add(new UserDTO(0,"홍성현",26,"01092059813"));
+        //userDB.add(new UserDTO(0,"홍성현",26,"01092059813"));
 
 
         LocalDate startDate = LocalDate.now();
