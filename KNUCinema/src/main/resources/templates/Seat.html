@@ -84,7 +84,7 @@
                 <span class="age-rating">15</span>
                 <h2 th:text="${Movie.title}"></h2>
             </div>
-            <p th:text="${#temporals.format(Cinema.time, 'yy년MM월dd일 | hh:mm')}">24.06.05(수) | 14:00 ~ 16:38</p>
+            <p th:text="${#temporals.format(Time, 'yy년MM월dd일 | hh:mm')}"></p>
             <p>KNU Cinema</p>
         </div>
     </div>
@@ -194,9 +194,11 @@
             },
             body: JSON.stringify(selectedSeats)
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            alert("Seats reserved successfully!");
+            if(data.status === 'success'){
+                window.location.href = data.redirectUrl;
+            }
         })
         .catch(error => {
             console.error('Error:', error);

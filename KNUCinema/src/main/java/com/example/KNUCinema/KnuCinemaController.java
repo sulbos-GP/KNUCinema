@@ -2,10 +2,7 @@ package com.example.KNUCinema;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +27,9 @@ public class KnuCinemaController {
         return "mainPage";
     }
 
-    @RequestMapping("/tests")
-    public  String test() {
-        return "TEST";
+    @RequestMapping("/payment")
+    public  String payment() {
+        return "payment";
     }
     
 
@@ -43,6 +40,7 @@ public class KnuCinemaController {
         model.addAttribute("Movie",movieService.find(id));
         model.addAttribute("Cinema",movieService.findCinemaDTO(id));
         model.addAttribute("Time",movieService.findCinemaDTO(id).getTime());
+        System.out.println(movieService.findCinemaDTO(id).getTime());
         return "Seat";
     }
 
@@ -68,12 +66,6 @@ public class KnuCinemaController {
     public String count()
     {
         return "카운트 = "+movieService.count();
-    }
-
-    public void adultNum(int adult)
-    {
-        System.out.println("Adult 추가");
-        adult++;
     }
 
    /* @RequestMapping("/reserve")
@@ -123,7 +115,7 @@ public class KnuCinemaController {
         //model.addAttribute("movieTime",movieReservation.getMoviesByCinemaId(id));
 
 
-
+        System.out.println("테스트용");
 
         model.addAttribute("limitMinDate", today);
         model.addAttribute("limitMaxDate", today.plusDays(7));
@@ -163,7 +155,7 @@ public class KnuCinemaController {
     //Seat/1 주소에서 Feach API POST
     //0 : 빈좌석 1: 성인 2: 청소년 3:경로 4:장애인
     @PostMapping("/Seat/Post")
-    public ResponseEntity<String> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats) {
+    public ResponseEntity<Map<String, String>> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats) {
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
         // System.out.println(seats);
@@ -175,7 +167,10 @@ public class KnuCinemaController {
         }
         movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
         System.out.println(movieService.findCinemaDTO(1).getSeat());
-        return ResponseEntity.ok("Seats successfully");
+        Map<String,String> response = new HashMap<>();
+        response.put("status","success");
+        response.put("redirectUrl", "/payment");
+        return ResponseEntity.ok(response);
     }
 
 
