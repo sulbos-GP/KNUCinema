@@ -84,7 +84,7 @@
                 <span class="age-rating">15</span>
                 <h2 th:text="${Movie.title}"></h2>
             </div>
-            <p th:text="${#temporals.format(Cinema.time, 'yy년MM월dd일 | hh:mm')}">24.06.05(수) | 14:00 ~ 16:38</p>
+            <p th:text="${#temporals.format(Time, 'yy년MM월dd일 | hh:mm')}"></p>
             <p>KNU Cinema</p>
         </div>
     </div>
@@ -113,6 +113,8 @@
         <input type="number" id='Disorder' value='0' readonly>
         <button onclick='count("minus","Disorder")'>-</button>
     </div>
+    <input type="hidden" id="number" th:value="${number}">
+
 </div>
 <div class="screen">SCREEN</div>
 <!--시트-->
@@ -185,18 +187,22 @@
             });
         });
 
+
+        const number = document.getElementById('number').value;
         //fetch API를 사용하여 페이지는 Seat/1를 타겟으로 Post전달
         //JSON 타입으로 controller에 전달
-        fetch('/Seat/Post', {
+        fetch('/Seat/Post?number=' + encodeURIComponent(number), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(selectedSeats)
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            alert("Seats reserved successfully!");
+            if(data.status === 'success'){
+                window.location.href = data.redirectUrl;
+            }
         })
         .catch(error => {
             console.error('Error:', error);

@@ -32,7 +32,7 @@ public class DataBaseImple implements DatabaseDAO{
 
 
        // 테스트용 더미 user 메모리db생성
-        userDB.add(new UserDTO(1,"홍성현",26,"01092059813"));
+        userDB.add(new UserDTO(0,"홍성현",26,"01092059813"));
 
 
         LocalDate startDate = LocalDate.now();
@@ -40,11 +40,11 @@ public class DataBaseImple implements DatabaseDAO{
             LocalDate currentDate = startDate.plusDays(i);
 
             for (int j = 1; j < 5; j++) {
-                cinema.add(new CinemaDTO(j, currentDate.atStartOfDay().plusHours(3 * j), seat, movies.get(i)));
+                cinema.add(new CinemaDTO(j, currentDate.atStartOfDay().plusHours(3 * j), new CinemaDTO.Seat(10,10), movies.get(i)));
             }
         }
 
-        reservationDB.add(new ReservationDTO(0,new CinemaDTO(1, LocalDate.now().atTime(1,1), seat, movies.get(1)), 1));
+        reservationDB.add(new ReservationDTO(0,new CinemaDTO(1, LocalDate.now().atTime(1,1), new CinemaDTO.Seat(10,10), movies.get(1)), 1,""));
     }
 
 
