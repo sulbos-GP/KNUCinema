@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
     <style>
         .wrapper {
             display: flex;
@@ -68,14 +69,23 @@
             line-height: 30px;
             margin-right: 10px;
         }
+        button.reserve-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button.reserve-button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
-
-
-
-
-
 <div>
     <div class="movie-container">
         <img th:src="${Movie.image}" th:alt="${Movie.title}" class="movie-poster"/>
@@ -114,13 +124,13 @@
         <button onclick='count("minus","Disorder")'>-</button>
     </div>
     <input type="hidden" id="number" th:value="${number}">
-
 </div>
 <div class="screen">SCREEN</div>
 <!--시트-->
 <div class="wrapper">
     <div class="container" id="seatContainer"></div>
 </div>
+<button class="reserve-button" onclick="sendData()">예약 하기</button>
 <script>
     //total : 전체 선택 가능 인원
     //curTotal : 현재 선택 인원
@@ -180,10 +190,15 @@
     {
         allChildren = document.querySelectorAll('.seat.selected');
         for(i=0;i<allChildren.length;i++){
+
             if(allChildren[i].dataset.active==1){
                 allChildren[i].className = "seat";
                 allChildren[i].dataset.active=0;
             }
+
+            allChildren[i].className = "seat";
+            allChildren[i].dataset.active=0;
+
             curTotal=0;
         }
     }
@@ -200,7 +215,6 @@
                 seat: null
             });
         });
-
 
         const number = document.getElementById('number').value;
 
@@ -230,9 +244,6 @@
         });
     }
 </script>
-<!--버튼 클릭 시 정해진 페이지로 데이터 전달(컨트롤러로 데이터 전달)-->
-<button onclick="sendData()">데이터 전달</button>
-</body>
 <!-- <인원 선택 클릭 시 정보가 넘어와서 인원을 더하고 뺸다. -->
 <script th:inline="javascript">
     function count(type,valueName)  {
@@ -251,4 +262,5 @@
         }
     }
 </script>
+</body>
 </html>
