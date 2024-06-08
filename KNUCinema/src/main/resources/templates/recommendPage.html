@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body>
-    <div>xptmxm</div>
+<body th:each ="answer : ${answers}">
+    <img th:src="@{'image/' + ${answer} + '.png'}" alt="영화이미지">
 </body>
 </html>
