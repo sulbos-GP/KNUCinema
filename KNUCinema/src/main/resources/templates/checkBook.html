@@ -22,10 +22,22 @@
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
         }
 
+<div th:if="${#lists.isEmpty(ReservationDatas)}">
+    <p>예약한 내용이 없습니다</p>
+</div>
+<div th:unless="${#lists.isEmpty(ReservationDatas)}">
+    <p>예약 내용:</p>
+    <ul>
+        <li th:each="reservation : ${ReservationDatas}">
+            <p>예약한 영화: <span th:text="${reservation.cinema.title}"></span></p>
+            <p>예약 영화 사진: <span th:text="${reservation.cinema.image}"></span></p>
+            <p>예약 시간: <span th:text="${reservation.cinema.time}"></span></p>
+
         li{
             list-style: none;
         }
     </style>
+
 
 <div class="container">
     <p>예약자 성함: <span th:text="${UserDatas.name}"></span></p>

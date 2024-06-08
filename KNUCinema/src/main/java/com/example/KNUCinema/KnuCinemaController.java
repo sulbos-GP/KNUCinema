@@ -2,9 +2,14 @@ package com.example.KNUCinema;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,16 +42,34 @@ public class KnuCinemaController {
     @PostMapping("/Seat/{id}")
     public String seat(@PathVariable("id") int id,
                        @RequestParam("selectedValue") String selectedValue,
-                       @RequestParam("user") String user, Model model)
+                       @RequestParam("user") String user,
+                       @RequestParam("date") String date,
+                       @RequestParam("movieId") int movieID, Model model)
     {
 
+        int movieId = movieID;
         String number = user;
         String t = selectedValue;
+        String dates = date+" "+t;
+        Pattern pattern = Pattern.compile("(\\d{4}년 \\d{2}월 \\d{2}일)\\s.+\\s(\\d{2}:\\d{2})");
+        Matcher matcher = pattern.matcher(dates);
 
+        LocalDateTime localDateTime = null;
+        if (matcher.find()) {
+            String datePart = matcher.group(1); // 날짜 부분
+            String timePart = matcher.group(2); // 시간 부분
+            String dateTimeString = datePart + " " + timePart; // 날짜와 시간 부분을 결합
 
-        // 전화번호
+            // DateTimeFormatter 정의
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm");
 
-        CinemaDTO cinemaDTO = movieService.findCinemaDTO(id);
+            // 문자열을 LocalDateTime으로 파싱
+            localDateTime = LocalDateTime.parse(dateTimeString, formatter);
+        } else {
+            System.err.println("입력 문자열을 파싱할 수 없습니다.");
+        }
+
+        CinemaDTO cinemaDTO = movieService.findTimeCinemaDTO(id,localDateTime);
 
 
         model.addAttribute("Movie",movieService.find(id));
@@ -54,6 +77,7 @@ public class KnuCinemaController {
         model.addAttribute("selectedValue",selectedValue);
         model.addAttribute("Cinema",cinemaDTO);
         model.addAttribute("Time",cinemaDTO.getTime());
+        model.addAttribute("movieID",movieId);
 
 
         return "Seat";
@@ -199,23 +223,35 @@ public class KnuCinemaController {
     //Seat/1 주소에서 Feach API POST
     //0 : 빈좌석 1: 성인 2: 청소년 3:경로 4:장애인
     @PostMapping("/Seat/Post")
-    public ResponseEntity<Map<String,String>> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats,
-                                               @RequestParam("number") String number) {
+    public ResponseEntity<Map<String,String>> reserveSeats(@RequestBody Map<String,Object> request){
+        //List<CinemaDTO.Seat> seats,@RequestParam("number") String number)
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
-        String reserSeat ="";
-        int[][] seatArray = movieService.findCinemaDTO(1).getSeat().getSeat();
+        String number=(String)request.get("number");
+        int movieID = (int)request.get("movieID");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String timeString = (String) request.get("time");
+        LocalDateTime time = LocalDateTime.parse(timeString, formatter);
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<CinemaDTO.Seat> seats = mapper.convertValue(request.get("selectedSeats"), new TypeReference<List<CinemaDTO.Seat>>() {});        String reserSeat = "";
+
+        int[][] seatArray = movieService.findTimeCinemaDTO(movieID,time).getSeat().getSeat();
         for(int i=0;i<seats.size();i++)
         {
-            CinemaDTO.Seat index = seats.get(i);
-            seatArray[index.getRow()][index.getCol()] = 1;
-            reserSeat+=index.getRow()+""+index.getCol();
-        }
 
+            CinemaDTO.Seat index = seats.get(i);
+            if(seatArray[index.getRow()][index.getCol()]!=2) {
+                seatArray[index.getRow()][index.getCol()] = 2;
+                reserSeat += (char) ('A' + index.getRow()) + "" + index.getCol() + " ";
+            }
+        }
+        System.out.println(reserSeat);
 
         //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
 
         movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
+
         UserDTO userDTO =  movieService.findUser(number);
         movieReservation.setReservation(movieService.findCinemaDTO(1),userDTO.getId(),reserSeat);
 
@@ -232,6 +268,32 @@ public class KnuCinemaController {
 
 
 
+    }
+
+    @Autowired
+    private DatabaseDAO DB;
+
+    @Autowired
+    private ChatGptService chatGptService;
+
+    public void GPTController(ChatGptService chatGptService) {
+        this.chatGptService = chatGptService;
+    }
+
+    @RequestMapping("/question")
+    public String sendQuestion(QuestionRequestDto requestDto) {
+        String movieList ="";
+        for(int i=0;i<DB.getMovie().size();i++)
+        {
+            movieList+=DB.getMovie().get(i).getTitle()+"/";
+        }
+        requestDto.setQuestion(new ChatGptRequestDto.Message("user",movieList+"영화 리스트를 /로 나눠서 알려줄꺼야." +
+                "너는 지금부터 내가 준 영화제목 중에서 3가지로 정해서 나에게 알려줘야 해.답변 양식은 예를 들어 '탑건/인터스텔라/슈퍼맨' 처럼 나에게 보내줘야 해." +
+                "너는 반드시 이 양식을 지켜야 해. 지금부터 나에게 영화 3가지를 정해서 알려줘."));
+
+        ChatGptResponseDto gpt = chatGptService.askQuestion(requestDto);
+        System.out.println(gpt.getChoices().getLast().getMessage().getContent());
+        return "redirect:/payment";
     }
 
 

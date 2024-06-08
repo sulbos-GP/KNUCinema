@@ -18,6 +18,7 @@ import java.util.List;
 public class ChatGptRequestDto implements Serializable {
 
     private String model;
+    @JsonProperty
     private List<Message> messages;
     @JsonProperty("max_tokens")
     private Integer maxTokens;
