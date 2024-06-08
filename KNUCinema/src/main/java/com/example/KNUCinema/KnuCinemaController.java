@@ -32,7 +32,7 @@ public class KnuCinemaController {
     public  String payment() {
         return "payment";
     }
-    
+
 
     @PostMapping("/Seat/{id}")
     public String seat(@PathVariable("id") int id,
@@ -42,12 +42,17 @@ public class KnuCinemaController {
 
         String number = user;
         String t = selectedValue;
+
+
         // 전화번호
+
+        CinemaDTO cinemaDTO = movieService.findCinemaDTO(id);
+
+
         model.addAttribute("Movie",movieService.find(id));
         model.addAttribute("selectedValue",selectedValue);
-        model.addAttribute("Cinema",movieService.findCinemaDTO(id));
-        model.addAttribute("Time",movieService.findCinemaDTO(id).getTime());
-        System.out.println(movieService.findCinemaDTO(id).getTime());
+        model.addAttribute("Cinema",cinemaDTO);
+        model.addAttribute("Time",cinemaDTO.getTime());
 
 
         return "Seat";
@@ -77,13 +82,19 @@ public class KnuCinemaController {
         return "카운트 = "+movieService.count();
     }
 
+    public void adultNum(int adult)
+    {
+        System.out.println("Adult 추가");
+        adult++;
+    }
+
    /* @RequestMapping("/reserve")
     public String reserve(Model model){
         //선택할 수 있는 날짜를 오늘부터 7일 후 까지만 제약을 두기 위해 작성함
         LocalDate today = LocalDate.now();
 
         for(int i =0; i<10;i++){
-            model.addAttribute("movies"+i, knuMovieServiceImpl.db.get(i));     
+            model.addAttribute("movies"+i, knuMovieServiceImpl.db.get(i));
             model.addAttribute("movieTime"+i, knuMovieServiceImpl.movie.get(i));
         }
 
@@ -141,7 +152,7 @@ public class KnuCinemaController {
         //model.addAttribute("movieTime",movieReservation.getMoviesByCinemaId(id));
 
 
-        System.out.println("테스트용");
+
 
         model.addAttribute("limitMinDate", today);
         model.addAttribute("limitMaxDate", today.plusDays(7));
@@ -187,8 +198,8 @@ public class KnuCinemaController {
     //Seat/1 주소에서 Feach API POST
     //0 : 빈좌석 1: 성인 2: 청소년 3:경로 4:장애인
     @PostMapping("/Seat/Post")
-    public ResponseEntity<Map<String, String>> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats) {
-    public ResponseEntity<String> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats, @RequestParam("number") String number) {
+    public ResponseEntity<Map<String,String>> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats,
+                                               @RequestParam("number") String number) {
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
         System.out.println(number);
@@ -198,6 +209,10 @@ public class KnuCinemaController {
             CinemaDTO.Seat index = seats.get(i);
             seatArray[index.getRow()][index.getCol()] = 1;
         }
+
+
+        //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
+
         movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
         System.out.println(movieService.findCinemaDTO(1).getSeat());
         Map<String,String> response = new HashMap<>();
