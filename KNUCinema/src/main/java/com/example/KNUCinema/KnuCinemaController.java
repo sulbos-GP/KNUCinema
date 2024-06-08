@@ -37,9 +37,9 @@ public class KnuCinemaController {
     
 
     @PostMapping("/Seat/{id}")
-    public String seat(@PathVariable("id") int id, Model model ,@RequestParam String selectedValue)
+    public String seat(@PathVariable("id") int id, Model model)
     {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+selectedValue);
+        // 전화번호
         model.addAttribute("Movie",movieService.find(id));
         model.addAttribute("Cinema",movieService.findCinemaDTO(id));
         model.addAttribute("Time",movieService.findCinemaDTO(id).getTime());
@@ -162,7 +162,7 @@ public class KnuCinemaController {
 
     //Seat/1 주소에서 Feach API POST
     //0 : 빈좌석 1: 성인 2: 청소년 3:경로 4:장애인
-    @PostMapping("/Seat/1")
+    @PostMapping("/Seat/Post")
     public ResponseEntity<String> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats) {
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
