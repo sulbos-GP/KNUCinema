@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class KnuCinemaController {
@@ -94,7 +95,7 @@ public class KnuCinemaController {
 
     //영화관 아이디 받으면 볼 수 있는 영화 리스트 보내기
     @RequestMapping("/reserve")
-    public String reserve(Model model){
+    public String reserve(@ModelAttribute("user") UserDTO user, Model model){
         int id = 1;
         LocalDate today = LocalDate.now();
 
@@ -139,9 +140,11 @@ public class KnuCinemaController {
     }
 
     @PostMapping("/userForm")
-    public String submitForm(UserDTO user, Model model) {
+    public String submitForm(UserDTO user, RedirectAttributes redirectAttributes) {
         try {
             movieReservation.setUserData(user);
+            redirectAttributes.addFlashAttribute("user", user);
+
         }
         catch (Exception e){
 
