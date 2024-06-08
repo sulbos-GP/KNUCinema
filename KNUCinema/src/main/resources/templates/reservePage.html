@@ -187,9 +187,16 @@
             userNumber.name = 'user';
             userNumber.value = document.getElementById('number').value;
 
+            // Create an input element to hold user Date
+            var userDate = document.createElement('input');
+            userDate.type = 'hidden';
+            userDate.name = 'date';
+            userDate.value = document.querySelector('.selectedDate').textContent;
+
             // Append input to form
             form.appendChild(input);
             form.appendChild(userNumber);
+            form.appendChild(userDate);
 
             // Append form to document body and submit it
             document.body.appendChild(form);

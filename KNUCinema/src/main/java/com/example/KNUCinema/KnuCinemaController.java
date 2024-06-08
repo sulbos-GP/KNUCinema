@@ -2,7 +2,12 @@ package com.example.KNUCinema;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +42,32 @@ public class KnuCinemaController {
     @PostMapping("/Seat/{id}")
     public String seat(@PathVariable("id") int id,
                        @RequestParam("selectedValue") String selectedValue,
-                       @RequestParam("user") String user, Model model)
+                       @RequestParam("user") String user,
+                       @RequestParam("date") String date, Model model)
     {
 
         String number = user;
         String t = selectedValue;
+        String dates = date+" "+t;
+        Pattern pattern = Pattern.compile("(\\d{4}년 \\d{2}월 \\d{2}일)\\s.+\\s(\\d{2}:\\d{2})");
+        Matcher matcher = pattern.matcher(dates);
 
+        LocalDateTime localDateTime = null;
+        if (matcher.find()) {
+            String datePart = matcher.group(1); // 날짜 부분
+            String timePart = matcher.group(2); // 시간 부분
+            String dateTimeString = datePart + " " + timePart; // 날짜와 시간 부분을 결합
 
-        // 전화번호
+            // DateTimeFormatter 정의
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm");
 
-        CinemaDTO cinemaDTO = movieService.findCinemaDTO(id);
+            // 문자열을 LocalDateTime으로 파싱
+            localDateTime = LocalDateTime.parse(dateTimeString, formatter);
+        } else {
+            System.err.println("입력 문자열을 파싱할 수 없습니다.");
+        }
+
+        CinemaDTO cinemaDTO = movieService.findTimeCinemaDTO(id,localDateTime);
 
 
         model.addAttribute("Movie",movieService.find(id));
@@ -209,9 +230,9 @@ public class KnuCinemaController {
         {
             CinemaDTO.Seat index = seats.get(i);
             seatArray[index.getRow()][index.getCol()] = 1;
-            reserSeat+=index.getRow()+""+index.getCol();
+            reserSeat+=(char)('A'+index.getRow())+""+index.getCol()+" ";
         }
-
+        System.out.println(reserSeat);
 
         //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
 

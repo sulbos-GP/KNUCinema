@@ -131,6 +131,7 @@
     // 행과 열의 크기
     const rows = [[${Cinema.seat.row}]];
     const cols = [[${Cinema.seat.col}]];
+    const seats = [[${Cinema.seat.seat}]];
     //시트들의 정보를 가져옴(여러개)
     const container = document.getElementById('seatContainer');
     resetSeat();//시트 정보를 초기화 시킴 (이름은 reset인데 좌석을 동적으로 생성)
@@ -140,10 +141,17 @@
         for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
             for (let colIndex = 0; colIndex < cols; colIndex++) {
                 const seat = document.createElement('div');
-                seat.classList.add('seat');
                 seat.dataset.row = rowIndex;
                 seat.dataset.col = colIndex;
-                seat.dataset.active = 0;
+                seat.dataset.active = seats[rowIndex][colIndex];
+                console.log(seat.dataset.active);
+                if( seat.dataset.active == 0){
+                seat.classList.add('seat');
+                }
+                else{
+                seat.classList.add('seat');
+                seat.classList.add('selected');
+                }
                 // 좌석 클릭 시 발생 이벤트 리스너
                 seat.addEventListener('click', () => {
                     if(seat.classList.contains('selected')){
