@@ -14,8 +14,6 @@ public interface KnuMovieReservation { //TODO : IK
     ArrayList<ReservationDTO> getReservationById(String number); // 전화 번호로 예약 정보 받기
     ArrayList<ReservationDTO> getReservationById(long id); // 전화 번호로 예약 정보 받기
     ArrayList<ReservationDTO> setReservation(CinemaDTO cinema, int UserId); // 예약 정보 받기
-
-    void setUserData(UserDTO userData);
 }
 
 

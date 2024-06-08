@@ -100,16 +100,6 @@ public class DataBaseImple implements DatabaseDAO{
     }
 
     @Override
-    public void setUserData(UserDTO userDTO) {
-
-        userDTO.setId(userDB.stream().count());
-        userDB.add(userDTO);
-
-    }
-
-
-
-    @Override
     public ArrayList<UserDTO> getUser() {
         return userDB;
     }

@@ -135,10 +135,8 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
         return DB.setReservation(reservationDTO);
     }
 
-    @Override
-    public void setUserData(UserDTO userData) {
-        DB.setUserData(userData);
-    }
+
+
 
 
 }
