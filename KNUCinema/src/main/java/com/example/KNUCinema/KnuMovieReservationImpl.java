@@ -75,10 +75,6 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
 
     @Override
     public ArrayList<CinemaDTO> getAllMovies() {
-        ArrayList<CinemaDTO> currentList = new ArrayList<>();
-
-
-
         return DB.getCinema(); // 결과를 ArrayList로 반환
     }
 
@@ -139,8 +135,10 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
         return DB.setReservation(reservationDTO);
     }
 
-
-
+    @Override
+    public void setUserData(UserDTO userData) {
+        DB.setUserData(userData);
+    }
 
 
 }

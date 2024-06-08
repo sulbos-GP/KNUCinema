@@ -12,12 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class KnuCinemaController {
@@ -42,12 +38,20 @@ public class KnuCinemaController {
     
 
     @PostMapping("/Seat/{id}")
-    public String seat(@PathVariable("id") int id, Model model ,@RequestParam String selectedValue)
+    public String seat(@PathVariable("id") int id,
+                       @RequestParam("selectedValue") String selectedValue,
+                       @RequestParam("user") String user, Model model)
     {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+selectedValue);
+
+        String number = user;
+        String t = selectedValue;
+        // 전화번호
         model.addAttribute("Movie",movieService.find(id));
+        model.addAttribute("selectedValue",selectedValue);
         model.addAttribute("Cinema",movieService.findCinemaDTO(id));
         model.addAttribute("Time",movieService.findCinemaDTO(id).getTime());
+
+
         return "Seat";
     }
 
@@ -60,7 +64,12 @@ public class KnuCinemaController {
 
     @GetMapping("/mybook")
     public String checkBook(@RequestParam("phoneNumber") String number, Model model){
-        model.addAttribute("phoneNumber",movieService.findPhoneNumber(number));
+
+        UserDTO user = movieService.findUser(number);
+        model.addAttribute("UserDatas",user);
+
+        ArrayList<ReservationDTO> reservations = movieReservation.getReservationById(user.getId());
+        model.addAttribute("ReservationDatas", reservations);
         return "checkBook";
     }
 
@@ -92,12 +101,29 @@ public class KnuCinemaController {
         return "reservePage";
     }*/
 
+
+    /*@PostMapping("/reserve")
+    public String submitReserve(@RequestParam("selectedValue") String selectedValue, Model model) {
+        int id;
+
+        try {
+            selectedValue
+
+            redirectAttribute.addFlashAttribute("user", user.getPhoneNumber());
+        }
+        catch (Exception e){
+
+        }
+        return "redirect:/Seat/" + String.valueOf(id); // 결과를 보여줄 템플릿 이름
+    }*/
+
     //영화관 아이디 받으면 볼 수 있는 영화 리스트 보내기
     @RequestMapping("/reserve")
-    public String reserve(Model model){
+    public String reserve(@ModelAttribute("user") String user, Model model){
         int id = 1;
         LocalDate today = LocalDate.now();
 
+        model.addAttribute("number", user);
 
 
         List<CinemaDTO> allMovies = movieReservation.getAllMovies();
@@ -127,21 +153,32 @@ public class KnuCinemaController {
 
         model.addAttribute("limitMinDate", today);
         model.addAttribute("limitMaxDate", today.plusDays(7));
+
+
+
+
         return "reservePage";
     }
 
 
-    @GetMapping("/userForm")
+
+    @RequestMapping("/userForm")
     public String showForm(Model model) {
         model.addAttribute("user", new UserDTO());
-        return "userForm"; // Thymeleaf 템플릿 이름
+        return "GetUserDataPage"; // Thymeleaf 템플릿 이름
     }
 
     @PostMapping("/userForm")
-    public String submitForm(UserDTO user, Model model) {
-        // 폼 처리 로직
-        model.addAttribute("user", user);
-        return "userResult"; // 결과를 보여줄 템플릿 이름
+    public String submitForm(UserDTO user, RedirectAttributes redirectAttribute, Model model) {
+        try {
+            movieReservation.setUserData(user);
+            redirectAttribute.addFlashAttribute("user", user.getPhoneNumber());
+
+        }
+        catch (Exception e){
+
+        }
+        return "redirect:/reserve"; // 결과를 보여줄 템플릿 이름
     }
 
 
@@ -151,17 +188,17 @@ public class KnuCinemaController {
         //TODO : 뭔가 이상함
         model.addAttribute("Movie",movieReservation.getMoviesByTime(time,title));
 
-        return "";
+        return "reserve";
     }
 
 
     //Seat/1 주소에서 Feach API POST
     //0 : 빈좌석 1: 성인 2: 청소년 3:경로 4:장애인
-    @PostMapping("/Seat/1")
-    public ResponseEntity<String> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats) {
+    @PostMapping("/Seat/Post")
+    public ResponseEntity<String> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats, @RequestParam("number") String number) {
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
-        // System.out.println(seats);
+        System.out.println(number);
         int[][] seatArray = movieService.findCinemaDTO(1).getSeat().getSeat();
         for(int i=0;i<seats.size();i++)
         {

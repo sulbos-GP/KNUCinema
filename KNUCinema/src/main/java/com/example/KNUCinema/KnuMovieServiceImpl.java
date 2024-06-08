@@ -3,6 +3,8 @@ package com.example.KNUCinema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class KnuMovieServiceImpl implements KnuMovieService {
 
@@ -30,12 +32,16 @@ public class KnuMovieServiceImpl implements KnuMovieService {
         return find;
     }
 
+
     
     //휴대폰 번호로 예약 조회
-    public UserDTO findPhoneNumber(String phoneNumber){
+    public UserDTO findUser(String phoneNumber){
 
-        UserDTO findNumber = DB.getUser().stream().filter(m->m.getPhoneNumber().equals(phoneNumber)).findFirst().get();
-        return findNumber;
+        UserDTO data = DB.getUser().stream().filter(m->m.getPhoneNumber().equals(phoneNumber)).findFirst().get();
+
+
+
+        return data;
     }
 
     //이름으로 예약 조회 (이름과 휴대폰 번호로 예약 조회해야하기 때문에 필요함)

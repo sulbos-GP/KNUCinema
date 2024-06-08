@@ -1,8 +1,10 @@
 package com.example.KNUCinema;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import lombok.Getter;
@@ -30,7 +32,7 @@ public class DataBaseImple implements DatabaseDAO{
 
 
        // 테스트용 더미 user 메모리db생성
-        userDB.add(new UserDTO(1,"홍성현",26,"01092059813","탑건"));
+        userDB.add(new UserDTO(1,"홍성현",26,"01092059813"));
 
 
         LocalDate startDate = LocalDate.now();
@@ -41,6 +43,8 @@ public class DataBaseImple implements DatabaseDAO{
                 cinema.add(new CinemaDTO(j, currentDate.atStartOfDay().plusHours(3 * j), seat, movies.get(i)));
             }
         }
+
+        reservationDB.add(new ReservationDTO(0,new CinemaDTO(1, LocalDate.now().atTime(1,1), seat, movies.get(1)), 1));
     }
 
 
@@ -57,6 +61,9 @@ public class DataBaseImple implements DatabaseDAO{
 
     @Getter
     public  ArrayList<ReservationDTO> reservationDB = new ArrayList<>();
+
+    @Getter @Setter
+    public RecommendDTO recommendDTO = new RecommendDTO();
 
 
     @Override
@@ -91,6 +98,16 @@ public class DataBaseImple implements DatabaseDAO{
 
         return reservationList;
     }
+
+    @Override
+    public void setUserData(UserDTO userDTO) {
+
+        userDTO.setId(userDB.stream().count());
+        userDB.add(userDTO);
+
+    }
+
+
 
     @Override
     public ArrayList<UserDTO> getUser() {
