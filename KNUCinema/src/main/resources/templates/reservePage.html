@@ -193,10 +193,16 @@
             userDate.name = 'date';
             userDate.value = document.querySelector('.selectedDate').textContent;
 
+            var movieId = document.createElement('input');
+            movieId.type = 'hidden';
+            movieId.name = 'movieId';
+            movieId.value = selectedMovieId;
+
             // Append input to form
             form.appendChild(input);
             form.appendChild(userNumber);
             form.appendChild(userDate);
+            form.appendChild(movieId);
 
             // Append form to document body and submit it
             document.body.appendChild(form);

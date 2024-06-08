@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,9 +45,11 @@ public class KnuCinemaController {
     public String seat(@PathVariable("id") int id,
                        @RequestParam("selectedValue") String selectedValue,
                        @RequestParam("user") String user,
-                       @RequestParam("date") String date, Model model)
+                       @RequestParam("date") String date,
+                       @RequestParam("movieId") int movieID, Model model)
     {
 
+        int movieId = movieID;
         String number = user;
         String t = selectedValue;
         String dates = date+" "+t;
@@ -75,6 +79,7 @@ public class KnuCinemaController {
         model.addAttribute("selectedValue",selectedValue);
         model.addAttribute("Cinema",cinemaDTO);
         model.addAttribute("Time",cinemaDTO.getTime());
+        model.addAttribute("movieID",movieId);
 
 
         return "Seat";
@@ -220,23 +225,35 @@ public class KnuCinemaController {
     //Seat/1 주소에서 Feach API POST
     //0 : 빈좌석 1: 성인 2: 청소년 3:경로 4:장애인
     @PostMapping("/Seat/Post")
-    public ResponseEntity<Map<String,String>> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats,
-                                               @RequestParam("number") String number) {
+    public ResponseEntity<Map<String,String>> reserveSeats(@RequestBody Map<String,Object> request){
+        //List<CinemaDTO.Seat> seats,@RequestParam("number") String number)
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
-        String reserSeat ="";
-        int[][] seatArray = movieService.findCinemaDTO(1).getSeat().getSeat();
+        String number=(String)request.get("number");
+        int movieID = (int)request.get("movieID");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String timeString = (String) request.get("time");
+        LocalDateTime time = LocalDateTime.parse(timeString, formatter);
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<CinemaDTO.Seat> seats = mapper.convertValue(request.get("selectedSeats"), new TypeReference<List<CinemaDTO.Seat>>() {});        String reserSeat = "";
+
+        int[][] seatArray = movieService.findTimeCinemaDTO(movieID,time).getSeat().getSeat();
         for(int i=0;i<seats.size();i++)
         {
+
             CinemaDTO.Seat index = seats.get(i);
-            seatArray[index.getRow()][index.getCol()] = 1;
-            reserSeat+=(char)('A'+index.getRow())+""+index.getCol()+" ";
+            if(seatArray[index.getRow()][index.getCol()]!=2) {
+                seatArray[index.getRow()][index.getCol()] = 2;
+                reserSeat += (char) ('A' + index.getRow()) + "" + index.getCol() + " ";
+            }
         }
         System.out.println(reserSeat);
 
         //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
 
         movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
+
         UserDTO userDTO =  movieService.findUser(number);
         movieReservation.setReservation(movieService.findCinemaDTO(1),userDTO.getId(),reserSeat);
 

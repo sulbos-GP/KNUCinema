@@ -152,6 +152,7 @@
                 seat.classList.add('seat');
                 seat.classList.add('selected');
                 }
+                if(seat.dataset.active!=2){
                 // 좌석 클릭 시 발생 이벤트 리스너
                 seat.addEventListener('click', () => {
                     if(seat.classList.contains('selected')){
@@ -169,6 +170,7 @@
                             alert("인원을 확인해 주세요.");
                     }
                 });
+                }
                 container.appendChild(seat);
             }
         }
@@ -178,15 +180,19 @@
     {
         allChildren = document.querySelectorAll('.seat.selected');
         for(i=0;i<allChildren.length;i++){
-            allChildren[i].className = "seat";
-            allChildren[i].dataset.active=0;
-            curTotal=0;
+            if(allChildren[i].dataset.active==1){
+                allChildren[i].className = "seat";
+                allChildren[i].dataset.active=0;
             }
+            curTotal=0;
+        }
     }
 
     //선택한 좌석들의 정보를 넘기기 위해서 배열 변수에 담기.
     function sendData() {
         const selectedSeats = [];
+        const time = [[${Time}]];
+        const movieID = [[${movieID}]];
         document.querySelectorAll('.seat.selected').forEach(seat => {
             selectedSeats.push({
                 row: parseInt(seat.dataset.row),
@@ -197,6 +203,13 @@
 
 
         const number = document.getElementById('number').value;
+
+        const requestData={
+            number:number,
+            selectedSeats:selectedSeats,
+            time:time,
+            movieID:movieID
+        };
         //fetch API를 사용하여 페이지는 Seat/1를 타겟으로 Post전달
         //JSON 타입으로 controller에 전달
         fetch('/Seat/Post?number=' + encodeURIComponent(number), {
@@ -204,7 +217,7 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(selectedSeats)
+            body: JSON.stringify(requestData)
         })
         .then(response => response.json())
         .then(data => {
