@@ -215,16 +215,21 @@ public class KnuCinemaController {
 
         movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
         UserDTO userDTO =  movieService.findUser(number);
+        movieReservation.setReservation(movieService.findCinemaDTO(1),userDTO.getId());
+
+
 
         System.out.println(movieService.findCinemaDTO(1).getSeat());
         Map<String,String> response = new HashMap<>();
         response.put("status","success");
         response.put("redirectUrl", "/payment");
+
+
+
         return ResponseEntity.ok(response);
 
-        movieReservation.setReservation(movieService.findCinemaDTO(1),userDTO.getId());
 
-        return ResponseEntity.ok("Seats successfully");
+
     }
 
 
