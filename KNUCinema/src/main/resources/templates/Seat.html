@@ -187,7 +187,7 @@
 
         //fetch API를 사용하여 페이지는 Seat/1를 타겟으로 Post전달
         //JSON 타입으로 controller에 전달
-        fetch('/Seat/Post', {
+        fetch('/Seat/Post?number=' + number,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

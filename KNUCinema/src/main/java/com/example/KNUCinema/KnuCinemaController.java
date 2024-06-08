@@ -45,11 +45,17 @@ public class KnuCinemaController {
 
         String number = user;
         String t = selectedValue;
+
+
         // 전화번호
+
+        CinemaDTO cinemaDTO = movieService.findCinemaDTO(id);
+
+
         model.addAttribute("Movie",movieService.find(id));
         model.addAttribute("selectedValue",selectedValue);
-        model.addAttribute("Cinema",movieService.findCinemaDTO(id));
-        model.addAttribute("Time",movieService.findCinemaDTO(id).getTime());
+        model.addAttribute("Cinema",cinemaDTO);
+        model.addAttribute("Time",cinemaDTO.getTime());
 
 
         return "Seat";
@@ -195,7 +201,8 @@ public class KnuCinemaController {
     //Seat/1 주소에서 Feach API POST
     //0 : 빈좌석 1: 성인 2: 청소년 3:경로 4:장애인
     @PostMapping("/Seat/Post")
-    public ResponseEntity<String> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats, @RequestParam("number") String number) {
+    public ResponseEntity<String> reserveSeats(@RequestBody List<CinemaDTO.Seat> seats,
+                                               @RequestParam("number") String number) {
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
         System.out.println(number);
@@ -205,6 +212,10 @@ public class KnuCinemaController {
             CinemaDTO.Seat index = seats.get(i);
             seatArray[index.getRow()][index.getCol()] = 1;
         }
+
+
+        //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
+
         movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
         System.out.println(movieService.findCinemaDTO(1).getSeat());
         return ResponseEntity.ok("Seats successfully");
