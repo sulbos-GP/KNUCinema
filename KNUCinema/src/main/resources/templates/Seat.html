@@ -113,6 +113,8 @@
         <input type="number" id='Disorder' value='0' readonly>
         <button onclick='count("minus","Disorder")'>-</button>
     </div>
+    <input type="hidden" id="number" th:value="${number}">
+
 </div>
 <div class="screen">SCREEN</div>
 <!--시트-->
@@ -185,9 +187,11 @@
             });
         });
 
+
+        const number = document.getElementById('number').value;
         //fetch API를 사용하여 페이지는 Seat/1를 타겟으로 Post전달
         //JSON 타입으로 controller에 전달
-        fetch('/Seat/Post', {
+        fetch('/Seat/Post?number=' + encodeURIComponent(number), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
