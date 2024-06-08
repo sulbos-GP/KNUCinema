@@ -139,12 +139,13 @@
     </tr>
 </table>
 
-        <button class="prevBtn" onclick="window.location.href='/'">
-             <span>이전으로</span>
-        </button>
+<button class="prevBtn" onclick="window.location.href='/'">
+    <span>이전으로</span>
+</button>
 <div>
     <form id="myForm" action="/Seat" method="post">
         <input type="hidden" id="selectedValue" name="selectedValue">
+        <input type="hidden" id="number" name="user" th:value ="${number}">
         <button type="button" class="nextBtn" onclick="goNextLevel()">
             <img src="/image/nextIcon.png" alt="다음버튼">
             <span>다음단계</span>
@@ -153,6 +154,7 @@
 </div>
 
 <script>
+
     var selectedMovieId = -1;
     var checkDateSelected = -1;
     var previousSelectedButton = null;
@@ -162,31 +164,38 @@
     }
 
     function goNextLevel() {
-    if (selectedMovieId < 0)
-        alert('영화를 선택해 주세요!');
-    else if (checkDateSelected < 0)
-        alert('날짜를 선택해 주세요!');
-    else {
-        // Create a form element
-        //window.location.href로 이동하게 되면 get으로 하기 때문에 form을 동적으로 생성
-        var form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/Seat/' + selectedMovieId;
+        if (selectedMovieId < 0)
+            alert('영화를 선택해 주세요!');
+        else if (checkDateSelected < 0)
+            alert('날짜를 선택해 주세요!');
+        else {
+            // Create a form element
+            //window.location.href로 이동하게 되면 get으로 하기 때문에 form을 동적으로 생성
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Seat/' + selectedMovieId;
 
-        // Create an input element to hold selected value
-        var input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'selectedValue';
-        input.value = document.getElementById('selectedValue').value;
+            // Create an input element to hold selected value
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selectedValue';
+            input.value = document.getElementById('selectedValue').value;
 
-        // Append input to form
-        form.appendChild(input);
+            // Create an input element to hold user number
+            var userNumber = document.createElement('input');
+            userNumber.type = 'hidden';
+            userNumber.name = 'user';
+            userNumber.value = document.getElementById('number').value;
 
-        // Append form to document body and submit it
-        document.body.appendChild(form);
-        form.submit();
+            // Append input to form
+            form.appendChild(input);
+            form.appendChild(userNumber);
+
+            // Append form to document body and submit it
+            document.body.appendChild(form);
+            form.submit();
+        }
     }
-}
 
     document.getElementById('datePicker').addEventListener('change', function () {
         checkDateSelected = 1;
@@ -222,8 +231,9 @@
         // 선택된 버튼의 값을 숨겨진 input에 할당
         document.getElementById("selectedValue").value = button.textContent;
     }
+
+    console.log(document.getElementById("number").value);
 </script>
 </body>
 
 </html>
-
