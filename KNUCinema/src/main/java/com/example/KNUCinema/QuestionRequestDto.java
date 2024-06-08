@@ -1,11 +1,12 @@
 package com.example.KNUCinema;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
 //QuestionRequestDto
-@Getter
+@Getter @Setter
 public class QuestionRequestDto implements Serializable {
-    private String question;
+    private ChatGptRequestDto.Message question;
 }

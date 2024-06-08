@@ -30,7 +30,7 @@ public class ChatGptService {
     }
 
     public ChatGptResponseDto askQuestion(QuestionRequestDto requestDto) {
-        return this.getResponse(
+      return this.getResponse(
                 this.buildHttpEntity(
                         new ChatGptRequestDto(
                                 GPTConfig.MODEL,
