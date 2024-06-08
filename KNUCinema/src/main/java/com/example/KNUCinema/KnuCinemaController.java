@@ -12,12 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 //@Controller
 public class KnuCinemaController {
@@ -136,17 +131,22 @@ public class KnuCinemaController {
     }
 
 
-    @GetMapping("/userForm")
+
+    @RequestMapping("/userForm")
     public String showForm(Model model) {
         model.addAttribute("user", new UserDTO());
-        return "userForm"; // Thymeleaf 템플릿 이름
+        return "GetUserDataPage"; // Thymeleaf 템플릿 이름
     }
 
     @PostMapping("/userForm")
     public String submitForm(UserDTO user, Model model) {
-        // 폼 처리 로직
-        model.addAttribute("user", user);
-        return "userResult"; // 결과를 보여줄 템플릿 이름
+        try {
+            movieReservation.setUserData(user);
+        }
+        catch (Exception e){
+
+        }
+        return "redirect:/reserve"; // 결과를 보여줄 템플릿 이름
     }
 
 
@@ -156,7 +156,7 @@ public class KnuCinemaController {
         //TODO : 뭔가 이상함
         model.addAttribute("Movie",movieReservation.getMoviesByTime(time,title));
 
-        return "";
+        return "reserve";
     }
 
 
