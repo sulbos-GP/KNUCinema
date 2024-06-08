@@ -13,5 +13,7 @@ public interface DatabaseDAO  {
 
     ArrayList<ReservationDTO> setReservation(ReservationDTO reservationDTO) ;
 
+    void setUserData(UserDTO userDTO);
+
     ArrayList<UserDTO> getUser();
 }
