@@ -8,8 +8,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.xml.crypto.Data;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -281,7 +284,7 @@ public class KnuCinemaController {
     }
 
     @RequestMapping("/question")
-    public String sendQuestion(QuestionRequestDto requestDto) {
+    public String sendQuestion(QuestionRequestDto requestDto, Model model) {
         String movieList ="";
         for(int i=0;i<DB.getMovie().size();i++)
         {
@@ -293,7 +296,17 @@ public class KnuCinemaController {
 
         ChatGptResponseDto gpt = chatGptService.askQuestion(requestDto);
         System.out.println(gpt.getChoices().getLast().getMessage().getContent());
-        return "redirect:/payment";
+
+        String gptAnswer = gpt.getChoices().getLast().getMessage().getContent();
+        String[] parts = gptAnswer.split("/");
+
+        List<String> answersList = new ArrayList<>();
+        for(String part : parts){
+            answersList.add(part);
+        }
+
+        model.addAttribute("answers", answersList);
+        return "recommendPage";
     }
 
 
