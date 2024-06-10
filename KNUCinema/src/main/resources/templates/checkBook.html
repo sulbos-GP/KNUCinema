@@ -10,10 +10,11 @@
 <body>
     <style>
         body {
+            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: auto;
             background-color: #f8f9fa;
         }
 
@@ -23,9 +24,11 @@
             border-radius: 0.5rem;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
         }
-        li{
-            list-style: none;
-        }
+
+       img{
+       width:200px;
+       height:350px;
+       }
 
         button{
             margin-left: 90%;
@@ -56,13 +59,12 @@
             <ul>
                 <li th:each="reservation : ${ReservationDatas}">
                     <p>예약한 영화: <span th:text="${reservation.cinema.title}"></span></p>
-                    <p>예약 영화 사진: <span><img th:src="@{${reservation.cinema.image}}  "></span></p>
+                    <p> <span><img th:src="@{${reservation.cinema.image}}  "></span></p>
                     <p>예약 시간: <span th:text="${reservation.cinema.time}"></span></p>
                     <p>예약 좌석: <span th:text="${reservation.reserSeat}"></span></p>
 
                 </li>
             </ul>
-            <button type="button" onClick="location.href='/'">홈으로</button>
         </div>
         <button type="button" onClick="location.href='/'" class="btn btn-custom btn-bottom-right">홈으로</button>
     </div>
