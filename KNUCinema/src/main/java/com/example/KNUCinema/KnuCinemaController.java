@@ -185,6 +185,22 @@ public class KnuCinemaController {
 
         list.sort(Comparator.comparingInt(CinemaListDTO::getId));
 
+
+        for (CinemaListDTO l : list){
+            List<LocalDateTime> uniqueTimes = l.getTimes().stream()
+                    .collect(Collectors.collectingAndThen(
+                            Collectors.toMap(
+                                    dateTime -> dateTime.toLocalTime().withSecond(0).withNano(0), // Key: 시간과 분
+                                    dateTime -> dateTime,
+                                    (dateTime1, dateTime2) -> dateTime1 // 중복이 발생하면 첫 번째 항목 유지
+                            ),
+                            map -> new ArrayList<>(map.values())
+                    ));
+
+            l.getTimes().clear();
+            uniqueTimes.sort(Comparator.comparingInt(LocalDateTime::getHour))  ;
+            l.getTimes().addAll(uniqueTimes);
+        }
         model.addAttribute("movies", list);
         //model.addAttribute("movies", movieReservation.getAllMovies());
         //model.addAttribute("movieTime",movieReservation.getMoviesByCinemaId(id));
