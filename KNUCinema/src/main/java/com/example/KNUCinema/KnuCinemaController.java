@@ -230,40 +230,44 @@ public class KnuCinemaController {
         //List<CinemaDTO.Seat> seats,@RequestParam("number") String number)
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
-        String number=(String)request.get("number");
-        int movieID = (int)request.get("movieID");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        String timeString = (String) request.get("time");
-        LocalDateTime time = LocalDateTime.parse(timeString, formatter);
+        Map<String, String> response = new HashMap<>();
+        try {
+            String number = (String) request.get("number");
+            int movieID = (int) request.get("movieID");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            String timeString = (String) request.get("time");
+            LocalDateTime time = LocalDateTime.parse(timeString, formatter);
 
-        ObjectMapper mapper = new ObjectMapper();
-        List<CinemaDTO.Seat> seats = mapper.convertValue(request.get("selectedSeats"), new TypeReference<List<CinemaDTO.Seat>>() {});        String reserSeat = "";
+            ObjectMapper mapper = new ObjectMapper();
+            List<CinemaDTO.Seat> seats = mapper.convertValue(request.get("selectedSeats"), new TypeReference<List<CinemaDTO.Seat>>() {
+            });
+            String reserSeat = "";
 
-        int[][] seatArray = movieService.findTimeCinemaDTO(movieID,time).getSeat().getSeat();
-        for(int i=0;i<seats.size();i++)
-        {
+            int[][] seatArray = movieService.findTimeCinemaDTO(movieID, time).getSeat().getSeat();
+            for (int i = 0; i < seats.size(); i++) {
 
-            CinemaDTO.Seat index = seats.get(i);
-            if(seatArray[index.getRow()][index.getCol()]!=2) {
-                seatArray[index.getRow()][index.getCol()] = 2;
-                reserSeat += (char) ('A' + index.getRow()) + "" + index.getCol() + " ";
+                CinemaDTO.Seat index = seats.get(i);
+                if (seatArray[index.getRow()][index.getCol()] != 2) {
+                    seatArray[index.getRow()][index.getCol()] = 2;
+                    reserSeat += (char) ('A' + index.getRow()) + "" + index.getCol() + " ";
+                }
             }
+            System.out.println(reserSeat);
+
+            //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
+
+            movieService.findCinemaDTO(movieID).getSeat().setSeat(seatArray);
+
+            UserDTO userDTO = movieService.findUser(number);
+            movieReservation.setReservation(movieService.findCinemaDTO(movieID), userDTO.getId(), reserSeat);
+
+
+            System.out.println(movieService.findCinemaDTO(movieID).getSeat());
+            response.put("status", "success");
+            response.put("redirectUrl", "/payment");
+        } catch (Exception e){
+            response.put("status", "Fail");
         }
-        System.out.println(reserSeat);
-
-        //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
-
-        movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
-
-        UserDTO userDTO =  movieService.findUser(number);
-        movieReservation.setReservation(movieService.findCinemaDTO(1),userDTO.getId(),reserSeat);
-
-
-
-        System.out.println(movieService.findCinemaDTO(1).getSeat());
-        Map<String,String> response = new HashMap<>();
-        response.put("status","success");
-        response.put("redirectUrl", "/payment");
 
 
 
