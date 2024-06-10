@@ -139,9 +139,9 @@
     </tr>
 </table>
 
-<button class="prevBtn" onclick="window.location.href='/'">
-    <span>이전으로</span>
-</button>
+        <button class="prevBtn" onclick="window.location.href='/'">
+             <span>이전으로</span>
+        </button>
 <div>
     <form id="myForm" action="/Seat" method="post">
         <input type="hidden" id="selectedValue" name="selectedValue">
@@ -187,9 +187,22 @@
             userNumber.name = 'user';
             userNumber.value = document.getElementById('number').value;
 
+            // Create an input element to hold user Date
+            var userDate = document.createElement('input');
+            userDate.type = 'hidden';
+            userDate.name = 'date';
+            userDate.value = document.querySelector('.selectedDate').textContent;
+
+            var movieId = document.createElement('input');
+            movieId.type = 'hidden';
+            movieId.name = 'movieId';
+            movieId.value = selectedMovieId;
+
             // Append input to form
             form.appendChild(input);
             form.appendChild(userNumber);
+            form.appendChild(userDate);
+            form.appendChild(movieId);
 
             // Append form to document body and submit it
             document.body.appendChild(form);

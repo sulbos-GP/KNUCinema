@@ -3,6 +3,7 @@ package com.example.KNUCinema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Service
@@ -29,6 +30,20 @@ public class KnuMovieServiceImpl implements KnuMovieService {
     public CinemaDTO findCinemaDTO(int id)
     {
         CinemaDTO find = DB.getCinema().stream().filter(m->m.getId()==id).findFirst().get();
+        return find;
+    }
+
+    public CinemaDTO findTimeCinemaDTO(int id, LocalDateTime time)
+    {
+        System.out.println(id);
+        System.out.println(time);
+        CinemaDTO find=null;
+        try {
+            find = DB.getCinema().stream().filter(m -> m.getId() == id).filter(m -> m.getTime().isEqual(time)).findFirst().get();
+        }catch (Exception e)
+        {
+            System.out.println("실패");
+        }
         return find;
     }
 

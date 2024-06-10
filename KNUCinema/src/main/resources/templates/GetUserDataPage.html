@@ -3,32 +3,73 @@
 <head>
     <meta charset="utf-8">
     <title>사용자 등록 폼</title>
-    <link th:href="@{/css/bootstrap.min.css}" href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .container { max-width: 560px; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+
+        textarea{
+            resize: none;
+            height: 40px;
+        }
+
+        .form-group label {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-custom {
+            background-color: #ff5733;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-custom:hover {
+            background-color: #e74c3c;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="py-5 text-center">
-        <h2>사용자 등록 폼</h2>
+        <h2>예약자 등록 폼</h2>
     </div>
 
     <form action="/userForm" th:object="${user}" method="post">
         <div>
             <label>이름</label>
-            <input required type="text" th:field="*{name}" class="form-control">
+            <input required type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해 주세요">
         </div>
         <div>
             <label>나이</label>
-            <input required type="text" th:field="*{age}" class="form-control">
+            <input required type="text" th:field="*{age}" class="form-control" placeholder="숫자만 입력해 주세요">
         </div>
         <div>
             <label>전화번호</label>
-            <textarea required th:field="*{phoneNumber}" class="form-control" rows="4"></textarea>
+            <textarea required th:field="*{phoneNumber}" class="form-control" rows="4" placeholder="'-'를 제외한 숫자를 입력해 주세요" maxlength="11"></textarea>
         </div>
         <div class="mt-3">
-            <button type="submit" th:href = "@{/reserve}" class="btn btn-primary btn-block">추가</button>
+            <button type="submit" th:href = "@{/reserve}" class="btn btn-primary btn-block">등록</button>
         </div>
     </form>
 </div>
