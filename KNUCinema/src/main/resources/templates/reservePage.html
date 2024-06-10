@@ -58,18 +58,32 @@
 
         .prevBtn {
             cursor: pointer;
-            width: 10%;
-            height: 100px;
+            width: 180px;
+            height: 130px;
             background: none;
-            margin-bottom: 20px;
             position: absolute;
             bottom: 0;
-            left: 0;
-            margin-left: 148px;
+            right: 0;
+            margin-bottom: 20px;
+            margin-right: 76%;
+            border: 1px solid #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .prevBtn:hover {
-            background-color: #c9c9c9;
+            background-color: #f73c2f;
+        }
+
+        .prevBtn img {
+            max-width: 100%;
+            max-height: 60%;
+            margin-bottom: 10px;
+        }
+
+        .prevBtn span {
+            font-size: 30px;
         }
 
         .nextBtn {
@@ -140,6 +154,7 @@
 </table>
 
         <button class="prevBtn" onclick="window.location.href='/'">
+            <img src="/image/prevIcon.png" alt="이전버튼">
              <span>이전으로</span>
         </button>
 <div>
