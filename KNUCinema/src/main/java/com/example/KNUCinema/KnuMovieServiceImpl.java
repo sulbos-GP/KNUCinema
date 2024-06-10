@@ -37,13 +37,22 @@ public class KnuMovieServiceImpl implements KnuMovieService {
     {
         System.out.println(id);
         System.out.println(time);
+
         CinemaDTO find=null;
+
         try {
+            //var temp = DB.getCinema().stream().filter(m -> m.getId() == id).toArray();
+
+            //System.out.println(temp);
+
             find = DB.getCinema().stream().filter(m -> m.getId() == id).filter(m -> m.getTime().isEqual(time)).findFirst().get();
+
+
         }catch (Exception e)
         {
             System.out.println("실패");
         }
+
         return find;
     }
 

@@ -56,13 +56,13 @@
             <ul>
                 <li th:each="reservation : ${ReservationDatas}">
                     <p>예약한 영화: <span th:text="${reservation.cinema.title}"></span></p>
-                    <p>예약 영화 사진: <span th:text="${reservation.cinema.image}"></span></p>
+                    <p>예약 영화 사진: <span><img th:src="@{${reservation.cinema.image}}  "></span></p>
                     <p>예약 시간: <span th:text="${reservation.cinema.time}"></span></p>
-                    <p>예약 좌석 row: <span th:text="${reservation.cinema.seat.row}"></span></p>
-                    <p>예약 좌석 col: <span th:text="${reservation.cinema.seat.col}"></span></p>
+                    <p>예약 좌석: <span th:text="${reservation.reserSeat}"></span></p>
 
                 </li>
             </ul>
+            <button type="button" onClick="location.href='/'">홈으로</button>
         </div>
         <button type="button" onClick="location.href='/'" class="btn btn-custom btn-bottom-right">홈으로</button>
     </div>

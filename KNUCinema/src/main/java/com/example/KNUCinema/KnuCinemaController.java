@@ -185,6 +185,22 @@ public class KnuCinemaController {
 
         list.sort(Comparator.comparingInt(CinemaListDTO::getId));
 
+
+        for (CinemaListDTO l : list){
+            List<LocalDateTime> uniqueTimes = l.getTimes().stream()
+                    .collect(Collectors.collectingAndThen(
+                            Collectors.toMap(
+                                    dateTime -> dateTime.toLocalTime().withSecond(0).withNano(0), // Key: 시간과 분
+                                    dateTime -> dateTime,
+                                    (dateTime1, dateTime2) -> dateTime1 // 중복이 발생하면 첫 번째 항목 유지
+                            ),
+                            map -> new ArrayList<>(map.values())
+                    ));
+
+            l.getTimes().clear();
+            uniqueTimes.sort(Comparator.comparingInt(LocalDateTime::getHour))  ;
+            l.getTimes().addAll(uniqueTimes);
+        }
         model.addAttribute("movies", list);
         //model.addAttribute("movies", movieReservation.getAllMovies());
         //model.addAttribute("movieTime",movieReservation.getMoviesByCinemaId(id));
@@ -240,40 +256,44 @@ public class KnuCinemaController {
         //List<CinemaDTO.Seat> seats,@RequestParam("number") String number)
         // 좌석 데이터를 처리하는 로직
         // 예: 데이터베이스에 저장하거나 비즈니스 로직 수행
-        String number=(String)request.get("number");
-        int movieID = (int)request.get("movieID");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        String timeString = (String) request.get("time");
-        LocalDateTime time = LocalDateTime.parse(timeString, formatter);
+        Map<String, String> response = new HashMap<>();
+        try {
+            String number = (String) request.get("number");
+            int movieID = (int) request.get("movieID");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            String timeString = (String) request.get("time");
+            LocalDateTime time = LocalDateTime.parse(timeString, formatter);
 
-        ObjectMapper mapper = new ObjectMapper();
-        List<CinemaDTO.Seat> seats = mapper.convertValue(request.get("selectedSeats"), new TypeReference<List<CinemaDTO.Seat>>() {});        String reserSeat = "";
+            ObjectMapper mapper = new ObjectMapper();
+            List<CinemaDTO.Seat> seats = mapper.convertValue(request.get("selectedSeats"), new TypeReference<List<CinemaDTO.Seat>>() {
+            });
+            String reserSeat = "";
 
-        int[][] seatArray = movieService.findTimeCinemaDTO(movieID,time).getSeat().getSeat();
-        for(int i=0;i<seats.size();i++)
-        {
+            int[][] seatArray = movieService.findTimeCinemaDTO(movieID, time).getSeat().getSeat();
+            for (int i = 0; i < seats.size(); i++) {
 
-            CinemaDTO.Seat index = seats.get(i);
-            if(seatArray[index.getRow()][index.getCol()]!=2) {
-                seatArray[index.getRow()][index.getCol()] = 2;
-                reserSeat += (char) ('A' + index.getRow()) + "" + index.getCol() + " ";
+                CinemaDTO.Seat index = seats.get(i);
+                if (seatArray[index.getRow()][index.getCol()] != 2) {
+                    seatArray[index.getRow()][index.getCol()] = 2;
+                    reserSeat += (char) ('A' + index.getRow()) + "" + index.getCol() + " ";
+                }
             }
+            System.out.println(reserSeat);
+
+            //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
+
+            movieService.findCinemaDTO(movieID).getSeat().setSeat(seatArray);
+
+            UserDTO userDTO = movieService.findUser(number);
+            movieReservation.setReservation(movieService.findCinemaDTO(movieID), userDTO.getId(), reserSeat);
+
+
+            System.out.println(movieService.findCinemaDTO(movieID).getSeat());
+            response.put("status", "success");
+            response.put("redirectUrl", "/payment");
+        } catch (Exception e){
+            response.put("status", "Fail");
         }
-        System.out.println(reserSeat);
-
-        //ReservationDTO reservationDTO = new ReservationDTO(1,cinemaDTO, seat, movies.get(1)), 1);
-
-        movieService.findCinemaDTO(1).getSeat().setSeat(seatArray);
-
-        UserDTO userDTO =  movieService.findUser(number);
-        movieReservation.setReservation(movieService.findCinemaDTO(1),userDTO.getId(),reserSeat);
-
-
-
-        System.out.println(movieService.findCinemaDTO(1).getSeat());
-        Map<String,String> response = new HashMap<>();
-        response.put("status","success");
-        response.put("redirectUrl", "/payment");
 
 
 
@@ -300,9 +320,14 @@ public class KnuCinemaController {
         {
             movieList+=DB.getMovie().get(i).getTitle()+"/";
         }
-        requestDto.setQuestion(new ChatGptRequestDto.Message("user",movieList+"영화 리스트를 /로 나눠서 알려줄꺼야." +
-                "너는 지금부터 내가 준 영화제목 중에서 3가지로 정해서 나에게 알려줘야 해.답변 양식은 예를 들어 '탑건/인터스텔라/슈퍼맨' 처럼 나에게 보내줘야 해." +
-                "너는 반드시 이 양식을 지켜야 해. 지금부터 나에게 영화 3가지를 정해서 알려줘."));
+        requestDto.setQuestion(new ChatGptRequestDto.Message("user","영화 리스트를 /로 나눠서 알려줄꺼야." +movieList+
+                "너는 지금부터 영화 추천 도우미야."+"너는 지금부터 내가 준 영화제목 중에서 3개만 선택해. "+
+                "반드시 내가 말하는 유의사항을 지켜서 대답하도록해."+
+                "1. 출력 형식은 예를 들어 너가 '탑건','인터스텔라','슈퍼맨'으로 결정했다면 탑건/인터스텔라/슈퍼맨 으로 출력해."+
+                "2. 반드시 내가 예시로 들어준 출력 형식으로만 출력할 것."+
+                "3. 내가 처음에 알려준 영화 리스트 내에서 결정할 것."+
+                "4. 영화 순서는 섞어도 될 것."+
+                "위 사항을 지켜서 지금 나에게 영화를 추천해 줘"));
 
         ChatGptResponseDto gpt = chatGptService.askQuestion(requestDto);
         System.out.println(gpt.getChoices().getLast().getMessage().getContent());

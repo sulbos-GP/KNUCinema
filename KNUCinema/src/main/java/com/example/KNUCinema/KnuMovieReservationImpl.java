@@ -78,11 +78,6 @@ public class KnuMovieReservationImpl implements KnuMovieReservation
         return DB.getCinema(); // 결과를 ArrayList로 반환
     }
 
-    @Override
-    public ArrayList<MovieDTO> CurrentBestMovie() { // TODO: DB 연결하면 그때 구현
-        return null;
-    }
-
 
     @Override
     public ArrayList<ReservationDTO> getReservationById(String number){

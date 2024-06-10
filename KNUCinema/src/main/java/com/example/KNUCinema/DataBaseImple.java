@@ -38,9 +38,12 @@ public class DataBaseImple implements DatabaseDAO{
         for (int i = 0; i < 10; i++) {
             LocalDate currentDate = startDate.plusDays(i);
 
-            for (int j = 1; j < 5; j++) {
-                cinema.add(new CinemaDTO(j, currentDate.atStartOfDay().plusHours(3 * j), new CinemaDTO.Seat(10,10), movies.get(i)));
+            for (MovieDTO movieDTO : movies) {
+                for (int j = 1; j < 5; j++) {
+                    cinema.add(new CinemaDTO(j, currentDate.atStartOfDay().plusHours(3 * j), new CinemaDTO.Seat(10,10), movieDTO));
+                }
             }
+
         }
 
         reservationDB.add(new ReservationDTO(0,new CinemaDTO(1, LocalDate.now().atTime(1,1), new CinemaDTO.Seat(10,10), movies.get(1)), 1,""));
@@ -100,10 +103,8 @@ public class DataBaseImple implements DatabaseDAO{
 
     @Override
     public void setUserData(UserDTO userDTO) {
-
         userDTO.setId(userDB.stream().count());
         userDB.add(userDTO);
-
     }
 
 
