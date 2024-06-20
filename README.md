@@ -1,3 +1,3 @@
 # KNUCinema
 
-Knangnam Univercity Final Project
+Kangnam Univercity Final Project
